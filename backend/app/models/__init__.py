@@ -5,6 +5,9 @@ from app.models.product_variant import ProductVariant
 from app.models.user import User
 from app.models.category import Category
 from app.models.rental_rate import RentalRate
+from app.models.rental import Rental
+from app.models.rental_item import RentalItem
+from app.models.inventory_allocation import InventoryAllocation
 
 __all__ = [
     "User",
@@ -14,4 +17,7 @@ __all__ = [
     "InventoryItem",
     "PriceList",
     "RentalRate",
+    "Rental",
+    "RentalItem",
+    "InventoryAllocation",
 ]
