@@ -23,6 +23,14 @@ def return_rental(
             "Rental must be in return_pending status."
         )
 
+    now = datetime.now(timezone.utc)
+
+    if now < rental.start_at:
+        raise ValueError(
+            "Rental cannot be returned before its start time."
+        )
+
+
     returned_at = datetime.now(timezone.utc)
 
     allocations = db.scalars(
