@@ -10,6 +10,7 @@ from app.models.rental_item import RentalItem
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.return_inspection import ReturnInspection
 from app.models.damage_assessment import DamageAssessment
+from app.models.payment import Payment
 
 __all__ = [
     "User",
