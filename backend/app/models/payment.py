@@ -12,6 +12,7 @@ class PaymentType(str, Enum):
     RENTAL = "rental"
     DEPOSIT = "deposit"
     DAMAGE_CHARGE = "damage_charge"
+    LATE_FEE = "late_fee"
     REFUND = "refund"
 
 

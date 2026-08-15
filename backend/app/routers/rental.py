@@ -1,11 +1,14 @@
 from uuid import UUID
+from app.models.rental import Rental
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.schemas.rental import RentalCreate
-from app.services.rental import create_rental, cancel_rental
+from app.services.rental import (
+    create_rental, cancel_rental, mark_overdue_rentals, calculate_late_fee,
+    )
 
 
 router = APIRouter(
@@ -67,6 +70,55 @@ def cancel_rental_endpoint(
             "status": rental.status,
             "start_at": rental.start_at,
             "end_at": rental.end_at,
+        }
+
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        )
+
+
+@router.post("/mark-overdue")
+def mark_overdue_rentals_endpoint(
+    db: Session = Depends(get_db),
+):
+    overdue_rentals = mark_overdue_rentals(db=db)
+
+    return {
+        "message": "Overdue rentals processed successfully.",
+        "count": len(overdue_rentals),
+        "rentals": [
+            {
+                "id": rental.id,
+                "status": rental.status,
+                "end_at": rental.end_at,
+            }
+            for rental in overdue_rentals
+        ],
+    }
+
+@router.get("/{rental_id}/late-fee")
+def calculate_late_fee_endpoint(
+    rental_id: UUID,
+    db: Session = Depends(get_db),
+):
+    rental = db.get(Rental, rental_id)
+
+    if rental is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Rental not found.",
+        )
+
+    try:
+        late_fee = calculate_late_fee(rental)
+
+        return {
+            "rental_id": rental.id,
+            "rental_amount": rental.rental_amount,
+            "late_fee": late_fee,
+            "status": rental.status,
         }
 
     except ValueError as exc:

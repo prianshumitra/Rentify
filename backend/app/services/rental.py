@@ -1,9 +1,11 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 from uuid import UUID
+from math import ceil
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
 
 from app.models.inventory import InventoryItem, InventoryStatus
 from app.models.inventory_allocation import InventoryAllocation
@@ -146,3 +148,43 @@ def cancel_rental(
     db.refresh(rental)
 
     return rental
+
+def mark_overdue_rentals(
+    db: Session,
+) -> list[Rental]:
+
+    now = datetime.now(timezone.utc)
+
+    overdue_rentals = db.scalars(
+        select(Rental).where(
+            Rental.status == RentalStatus.ACTIVE,
+            Rental.end_at < now,
+        )
+    ).all()
+
+    for rental in overdue_rentals:
+        rental.status = RentalStatus.OVERDUE
+
+    db.commit()
+
+    return overdue_rentals
+
+
+def calculate_late_fee(
+    rental: Rental,
+) -> Decimal:
+
+    if rental.status != RentalStatus.OVERDUE:
+        raise ValueError("Late fee can only be calculated for overdue rentals.")
+
+    now = datetime.now(timezone.utc)
+
+    overdue_duration = now - rental.end_at
+
+    overdue_hours = overdue_duration.total_seconds() / 3600
+
+    late_periods = ceil(overdue_hours / 24)
+
+    late_fee = rental.rental_amount * Decimal("0.10") * late_periods
+
+    return late_fee.quantize(Decimal("0.01"))
