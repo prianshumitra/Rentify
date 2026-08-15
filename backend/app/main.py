@@ -6,6 +6,7 @@ from app.routers.rental_return import router as rental_return_router
 from app.routers.return_inspection import router as return_inspection_router
 from app.routers.damage_assessment import router as damage_assessment_router
 from app.routers.payment import router as payment_router
+from app.routers.payment_webhook import router as payment_webhook_router
 
 app = FastAPI(
     title="Rentify API",
@@ -18,3 +19,4 @@ app.include_router(rental_return_router)
 app.include_router(return_inspection_router)
 app.include_router(damage_assessment_router)
 app.include_router(payment_router)
+app.include_router(payment_webhook_router)
