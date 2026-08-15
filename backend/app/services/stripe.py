@@ -16,3 +16,12 @@ def create_payment_intent(amount: int, currency: str = "inr"):
     )
 
     return payment_intent
+
+def create_refund(payment_intent_id: str):
+    refund = stripe_client.v1.refunds.create(
+        {
+            "payment_intent": payment_intent_id,
+        }
+    )
+
+    return refund

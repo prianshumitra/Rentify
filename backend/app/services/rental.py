@@ -9,6 +9,8 @@ from app.models.inventory import InventoryItem, InventoryStatus
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.rental import Rental, RentalStatus
 from app.models.rental_item import RentalItem
+from app.services.payment import refund_payment
+from app.models.payment import Payment, PaymentStatus, PaymentType
 
 
 def create_rental(
@@ -84,6 +86,61 @@ def create_rental(
         )
 
         db.add(allocation)
+
+    db.commit()
+    db.refresh(rental)
+
+    return rental
+
+def cancel_rental(
+    db: Session,
+    rental_id: UUID,
+) -> Rental:
+
+    rental = db.get(Rental, rental_id)
+
+    if rental is None:
+        raise ValueError("Rental not found.")
+
+    cancellable_statuses = {
+        RentalStatus.CONFIRMED,
+        RentalStatus.READY_FOR_PICKUP,
+    }
+
+    if rental.status not in cancellable_statuses:
+        raise ValueError(
+            f"Rental cannot be cancelled from {rental.status.value} status."
+        )
+
+    # Check for a paid rental payment.
+    paid_payment = (
+        db.query(Payment)
+        .filter(
+            Payment.rental_id == rental_id,
+            Payment.payment_type == PaymentType.RENTAL,
+            Payment.status == PaymentStatus.PAID,
+        )
+        .first()
+    )
+
+    # Refund if the rental has already been paid.
+    if paid_payment:
+        refund_payment(
+            db=db,
+            rental_id=rental_id,
+        )
+
+    # Release inventory allocations.
+    allocations = db.scalars(
+        select(InventoryAllocation).where(
+            InventoryAllocation.rental_id == rental_id
+        )
+    ).all()
+
+    for allocation in allocations:
+        db.delete(allocation)
+
+    rental.status = RentalStatus.CANCELLED
 
     db.commit()
     db.refresh(rental)

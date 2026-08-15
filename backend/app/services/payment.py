@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.models.payment import Payment, PaymentStatus, PaymentType
 from app.models.rental import Rental
-from app.services.stripe import create_payment_intent
+from app.services.stripe import create_payment_intent, create_refund
 
 
 def create_payment(
@@ -41,6 +41,37 @@ def create_payment(
     )
 
     db.add(payment)
+    db.commit()
+    db.refresh(payment)
+
+    return payment
+
+
+def refund_payment(
+    db: Session,
+    rental_id: UUID,
+) -> Payment:
+
+    payment = (
+        db.query(Payment)
+        .filter(
+            Payment.rental_id == rental_id,
+            Payment.payment_type == PaymentType.RENTAL,
+            Payment.status == PaymentStatus.PAID,
+        )
+        .first()
+    )
+
+    if payment is None:
+        raise ValueError("No paid rental payment found.")
+
+    if not payment.stripe_payment_id:
+        raise ValueError("Payment does not have a Stripe payment ID.")
+
+    create_refund(payment.stripe_payment_id)
+
+    payment.status = PaymentStatus.REFUNDED
+
     db.commit()
     db.refresh(payment)
 

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.schemas.rental import RentalCreate
-from app.services.rental import create_rental
+from app.services.rental import create_rental, cancel_rental
 
 
 router = APIRouter(
@@ -42,6 +42,31 @@ def create_rental_endpoint(
             "rental_amount": rental.rental_amount,
             "deposit_amount": rental.deposit_amount,
             "total_amount": rental.total_amount,
+        }
+
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        )
+
+
+@router.post("/{rental_id}/cancel")
+def cancel_rental_endpoint(
+    rental_id: UUID,
+    db: Session = Depends(get_db),
+):
+    try:
+        rental = cancel_rental(
+            db=db,
+            rental_id=rental_id,
+        )
+
+        return {
+            "id": rental.id,
+            "status": rental.status,
+            "start_at": rental.start_at,
+            "end_at": rental.end_at,
         }
 
     except ValueError as exc:
