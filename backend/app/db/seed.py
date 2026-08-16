@@ -3,12 +3,28 @@ from app.models.category import Category
 from app.models.product import Product
 from app.models.product_variant import ProductVariant
 from app.models.inventory import InventoryItem
+from app.models.user import User
 
 
 def seed():
     db = SessionLocal()
 
     try:
+        # Find an existing vendor
+        vendor = (
+            db.query(User)
+            .filter(
+                User.is_vendor.is_(True),
+                User.is_active.is_(True),
+            )
+            .first()
+        )
+
+        if vendor is None:
+            raise ValueError(
+                "No active vendor found. Create or promote a vendor user first."
+            )
+
         category = Category(
             name="Cameras",
             slug="cameras",
@@ -19,6 +35,7 @@ def seed():
         db.flush()
 
         product = Product(
+            vendor_id=vendor.id,
             name="Canon EOS R6",
             slug="canon-eos-r6",
             description="Full-frame mirrorless camera",

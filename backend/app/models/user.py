@@ -40,3 +40,9 @@ class User(Base):
         nullable=False,
         default=False,
     )
+
+    is_vendor: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+    )

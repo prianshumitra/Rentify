@@ -4,6 +4,9 @@ from app.models.rental import Rental
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.core.security import get_current_user
+from app.models.user import User
+
 from app.db.session import get_db
 from app.schemas.rental import RentalCreate
 from app.services.rental import (
@@ -20,12 +23,11 @@ router = APIRouter(
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_rental_endpoint(
     rental_data: RentalCreate,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    # Temporary user ID for testing.
-    # We'll replace this with the authenticated user's ID later.
-    user_id = UUID("681e0146-7550-4fc4-a6df-938dc7be2e9c")
 
+    user_id = current_user.id
     try:
         rental = create_rental(
             db=db,
@@ -57,8 +59,23 @@ def create_rental_endpoint(
 @router.post("/{rental_id}/cancel")
 def cancel_rental_endpoint(
     rental_id: UUID,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    rental = db.get(Rental, rental_id)
+
+    if rental is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Rental not found.",
+        )
+
+    if not current_user.is_admin and rental.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to cancel this rental.",
+        )
+
     try:
         rental = cancel_rental(
             db=db,

@@ -21,6 +21,7 @@ class UserOut(BaseModel):
     first_name: str
     last_name: str
     is_admin: bool
+    is_vendor: bool
     is_active: bool
 
     model_config = {

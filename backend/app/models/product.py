@@ -1,12 +1,19 @@
+from uuid import UUID
+
 from sqlalchemy import Boolean, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
-from uuid import UUID
 
 from app.db.base import Base
 
 
 class Product(Base):
     __tablename__ = "products"
+
+    vendor_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False,
+        index=True,
+    )
 
     name: Mapped[str] = mapped_column(
         String(200),
