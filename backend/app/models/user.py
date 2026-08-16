@@ -3,19 +3,15 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
 
+
 class User(Base):
     __tablename__ = "users"
 
     email: Mapped[str] = mapped_column(
         String(255),
+        nullable=False,
         unique=True,
-        nullable=False,
         index=True,
-    )
-
-    password_hash: Mapped[str] = mapped_column(
-        String(255),
-        nullable=False,
     )
 
     first_name: Mapped[str] = mapped_column(
@@ -28,14 +24,19 @@ class User(Base):
         nullable=False,
     )
 
-    role: Mapped[str] = mapped_column(
-        String(50),
+    hashed_password: Mapped[str] = mapped_column(
+        String(255),
         nullable=False,
-        default="customer",
     )
 
     is_active: Mapped[bool] = mapped_column(
-        Boolean(),
+        Boolean,
         nullable=False,
         default=True,
+    )
+
+    is_admin: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
     )
