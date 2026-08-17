@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.db.session import get_db
-from app.models.payment import Payment, PaymentStatus
+from app.models.payment import Payment, PaymentStatus, PaymentType
+from app.models.rental import Rental, RentalStatus
 
 
 router = APIRouter(
@@ -20,7 +21,10 @@ async def stripe_webhook(
     db: Session = Depends(get_db),
 ):
     payload = await request.body()
-    signature = request.headers.get("stripe-signature")
+
+    signature = request.headers.get(
+        "stripe-signature"
+    )
 
     if not signature:
         raise HTTPException(
@@ -48,28 +52,40 @@ async def stripe_webhook(
         )
 
     if event["type"] == "payment_intent.succeeded":
-        payment_intent = event["data"]["object"]
 
-        print(
-            "STRIPE PAYMENT INTENT:",
-            payment_intent["id"],
-        )
+        payment_intent = event["data"]["object"]
 
         payment = (
             db.query(Payment)
             .filter(
-                Payment.stripe_payment_id == payment_intent["id"]
+                Payment.stripe_payment_id
+                == payment_intent["id"]
             )
             .first()
         )
 
-        print(
-            "RENTIFY PAYMENT FOUND:",
-            payment.id if payment else None,
-        )
+        if payment is None:
+            return {"status": "success"}
 
-        if payment:
-            payment.status = PaymentStatus.PAID
-            db.commit()
+        payment.status = PaymentStatus.PAID
+
+        if payment.payment_type == PaymentType.RENTAL:
+
+            rental = db.get(
+                Rental,
+                payment.rental_id,
+            )
+
+            if rental is not None:
+
+                if (
+                    rental.status
+                    == RentalStatus.PENDING_PAYMENT
+                ):
+                    rental.status = (
+                        RentalStatus.CONFIRMED
+                    )
+
+        db.commit()
 
     return {"status": "success"}

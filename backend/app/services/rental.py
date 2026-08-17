@@ -36,7 +36,7 @@ def create_rental(
             "Quantity must be at least 1."
         )
 
-    # Find the variant and its parent product.
+    # Find the product variant.
     variant = db.get(ProductVariant, variant_id)
 
     if variant is None:
@@ -49,6 +49,7 @@ def create_rental(
             "Product variant is inactive."
         )
 
+    # Find the product that owns the variant.
     product = db.get(Product, variant.product_id)
 
     if product is None:
@@ -61,14 +62,15 @@ def create_rental(
             "Product is inactive."
         )
 
-    # A vendor can rent other vendors' products,
+    # Vendors can rent other vendors' products,
     # but cannot rent their own products.
     if product.vendor_id == user_id:
         raise ValueError(
             "Vendors cannot rent their own products."
         )
 
-    # Find inventory items that are not already allocated.
+    # Find inventory items that are not already
+    # allocated during the requested rental period.
     allocated_items = select(
         InventoryAllocation.inventory_item_id
     ).where(
@@ -99,7 +101,7 @@ def create_rental(
         user_id=user_id,
         start_at=start_at,
         end_at=end_at,
-        status=RentalStatus.CONFIRMED,
+        status=RentalStatus.PENDING_PAYMENT,
         rental_amount=subtotal,
         deposit_amount=Decimal("0.00"),
         total_amount=subtotal,
@@ -142,7 +144,9 @@ def cancel_rental(
     rental = db.get(Rental, rental_id)
 
     if rental is None:
-        raise ValueError("Rental not found.")
+        raise ValueError(
+            "Rental not found."
+        )
 
     cancellable_statuses = {
         RentalStatus.CONFIRMED,
@@ -155,6 +159,7 @@ def cancel_rental(
             f"{rental.status.value} status."
         )
 
+    # Check for a paid rental payment.
     paid_payment = (
         db.query(Payment)
         .filter(
@@ -165,12 +170,14 @@ def cancel_rental(
         .first()
     )
 
+    # Refund if the rental has already been paid.
     if paid_payment:
         refund_payment(
             db=db,
             rental_id=rental_id,
         )
 
+    # Release inventory allocations.
     allocations = db.scalars(
         select(InventoryAllocation).where(
             InventoryAllocation.rental_id == rental_id
@@ -222,7 +229,9 @@ def calculate_late_fee(
 
     overdue_duration = now - rental.end_at
 
-    overdue_hours = overdue_duration.total_seconds() / 3600
+    overdue_hours = (
+        overdue_duration.total_seconds() / 3600
+    )
 
     late_periods = ceil(overdue_hours / 24)
 
@@ -232,4 +241,6 @@ def calculate_late_fee(
         * late_periods
     )
 
-    return late_fee.quantize(Decimal("0.01"))
+    return late_fee.quantize(
+        Decimal("0.01")
+    )
