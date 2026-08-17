@@ -1,18 +1,19 @@
 from datetime import datetime, timezone
 from decimal import Decimal
-from uuid import UUID
 from math import ceil
+from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-
 from app.models.inventory import InventoryItem, InventoryStatus
 from app.models.inventory_allocation import InventoryAllocation
+from app.models.payment import Payment, PaymentStatus, PaymentType
+from app.models.product import Product
+from app.models.product_variant import ProductVariant
 from app.models.rental import Rental, RentalStatus
 from app.models.rental_item import RentalItem
 from app.services.payment import refund_payment
-from app.models.payment import Payment, PaymentStatus, PaymentType
 
 
 def create_rental(
@@ -26,12 +27,48 @@ def create_rental(
 ) -> Rental:
 
     if start_at >= end_at:
-        raise ValueError("Rental end time must be after start time.")
+        raise ValueError(
+            "Rental end time must be after start time."
+        )
 
     if quantity < 1:
-        raise ValueError("Quantity must be at least 1.")
+        raise ValueError(
+            "Quantity must be at least 1."
+        )
 
-    # Find inventory items that are not already allocated
+    # Find the variant and its parent product.
+    variant = db.get(ProductVariant, variant_id)
+
+    if variant is None:
+        raise ValueError(
+            "Product variant not found."
+        )
+
+    if not variant.is_active:
+        raise ValueError(
+            "Product variant is inactive."
+        )
+
+    product = db.get(Product, variant.product_id)
+
+    if product is None:
+        raise ValueError(
+            "Product not found."
+        )
+
+    if not product.is_active:
+        raise ValueError(
+            "Product is inactive."
+        )
+
+    # A vendor can rent other vendors' products,
+    # but cannot rent their own products.
+    if product.vendor_id == user_id:
+        raise ValueError(
+            "Vendors cannot rent their own products."
+        )
+
+    # Find inventory items that are not already allocated.
     allocated_items = select(
         InventoryAllocation.inventory_item_id
     ).where(
@@ -52,7 +89,9 @@ def create_rental(
     )
 
     if len(available_items) < quantity:
-        raise ValueError("Not enough inventory available for the requested period.")
+        raise ValueError(
+            "Not enough inventory available for the requested period."
+        )
 
     subtotal = unit_price * quantity
 
@@ -94,6 +133,7 @@ def create_rental(
 
     return rental
 
+
 def cancel_rental(
     db: Session,
     rental_id: UUID,
@@ -111,10 +151,10 @@ def cancel_rental(
 
     if rental.status not in cancellable_statuses:
         raise ValueError(
-            f"Rental cannot be cancelled from {rental.status.value} status."
+            f"Rental cannot be cancelled from "
+            f"{rental.status.value} status."
         )
 
-    # Check for a paid rental payment.
     paid_payment = (
         db.query(Payment)
         .filter(
@@ -125,14 +165,12 @@ def cancel_rental(
         .first()
     )
 
-    # Refund if the rental has already been paid.
     if paid_payment:
         refund_payment(
             db=db,
             rental_id=rental_id,
         )
 
-    # Release inventory allocations.
     allocations = db.scalars(
         select(InventoryAllocation).where(
             InventoryAllocation.rental_id == rental_id
@@ -148,6 +186,7 @@ def cancel_rental(
     db.refresh(rental)
 
     return rental
+
 
 def mark_overdue_rentals(
     db: Session,
@@ -175,7 +214,9 @@ def calculate_late_fee(
 ) -> Decimal:
 
     if rental.status != RentalStatus.OVERDUE:
-        raise ValueError("Late fee can only be calculated for overdue rentals.")
+        raise ValueError(
+            "Late fee can only be calculated for overdue rentals."
+        )
 
     now = datetime.now(timezone.utc)
 
@@ -185,6 +226,10 @@ def calculate_late_fee(
 
     late_periods = ceil(overdue_hours / 24)
 
-    late_fee = rental.rental_amount * Decimal("0.10") * late_periods
+    late_fee = (
+        rental.rental_amount
+        * Decimal("0.10")
+        * late_periods
+    )
 
     return late_fee.quantize(Decimal("0.01"))
