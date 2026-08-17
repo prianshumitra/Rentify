@@ -13,6 +13,7 @@ from app.models.user import User
 
 password_hash = PasswordHash.recommended()
 
+
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/api/v1/users/login",
 )
@@ -90,6 +91,9 @@ def get_current_user(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User account is inactive.",
         )
+
+    print("JWT USER ID:", user.id)
+    print("JWT USER EMAIL:", user.email)
 
     return user
 
