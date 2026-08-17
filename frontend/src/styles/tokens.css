@@ -1,0 +1,110 @@
+:root {
+    /* ─────────────────────────────
+       COLORS
+       ───────────────────────────── */
+
+    --color-ivory: #f5f1e8;
+    --color-ivory-soft: #faf8f2;
+    --color-ink: #171717;
+    --color-ink-soft: #3f3d38;
+    --color-muted: #77736b;
+
+    --color-line: rgba(23, 23, 23, 0.14);
+    --color-line-soft: rgba(23, 23, 23, 0.08);
+
+    /*
+     * The accent is intentionally restrained.
+     * We'll finalize the exact brand accent after
+     * seeing the first visual composition.
+     */
+    --color-accent: #c45b3c;
+    --color-accent-soft: rgba(196, 91, 60, 0.12);
+
+
+    /* ─────────────────────────────
+       TYPOGRAPHY
+       ───────────────────────────── */
+
+    --font-sans:
+            Inter,
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    --font-display:
+            Georgia,
+            "Times New Roman",
+            serif;
+
+
+    /* ─────────────────────────────
+       TYPE SCALE
+       ───────────────────────────── */
+
+    --text-xs: 0.6875rem;
+    --text-sm: 0.8125rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.5rem;
+    --text-2xl: 2rem;
+    --text-3xl: 3rem;
+    --text-4xl: 4.5rem;
+    --text-5xl: 6rem;
+
+
+    /* ─────────────────────────────
+       SPACING
+       ───────────────────────────── */
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4rem;
+    --space-9: 6rem;
+    --space-10: 8rem;
+
+
+    /* ─────────────────────────────
+       BORDERS
+       ───────────────────────────── */
+
+    --border-thin: 1px solid var(--color-line);
+    --border-soft: 1px solid var(--color-line-soft);
+
+
+    /* ─────────────────────────────
+       MOTION
+       ───────────────────────────── */
+
+    --duration-fast: 150ms;
+    --duration-normal: 280ms;
+    --duration-slow: 500ms;
+
+    --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+
+
+    /* ─────────────────────────────
+       LAYOUT
+       ───────────────────────────── */
+
+    --content-width: 1440px;
+    --content-padding: clamp(1.25rem, 4vw, 5rem);
+
+
+    /* ─────────────────────────────
+       THREAD SYSTEM
+       ───────────────────────────── */
+
+    --thread-width: 1px;
+    --thread-color: rgba(23, 23, 23, 0.16);
+    --thread-active: var(--color-accent);
+
+    --node-size: 5px;
+}
