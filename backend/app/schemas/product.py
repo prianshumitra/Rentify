@@ -10,6 +10,14 @@ class ProductCreate(BaseModel):
     category_id: UUID
 
 
+class ProductUpdate(BaseModel):
+    name: str | None = None
+    slug: str | None = None
+    description: str | None = None
+    category_id: UUID | None = None
+    is_active: bool | None = None
+
+
 class ProductOut(BaseModel):
     id: UUID
     vendor_id: UUID

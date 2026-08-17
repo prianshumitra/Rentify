@@ -10,6 +10,7 @@ from app.routers.rental_lifecycle import router as rental_lifecycle_router
 from app.routers.rental_return import router as rental_return_router
 from app.routers.return_inspection import router as return_inspection_router
 from app.routers.user import router as user_router
+from app.routers.product_variant import router as product_variant_router
 
 
 app = FastAPI(
@@ -27,3 +28,4 @@ app.include_router(payment_router)
 app.include_router(payment_webhook_router)
 app.include_router(user_router)
 app.include_router(product_router)
+app.include_router(product_variant_router)
