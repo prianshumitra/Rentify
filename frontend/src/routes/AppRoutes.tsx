@@ -13,6 +13,7 @@ import Register from "../pages/public/Register";
 
 import UserHome from "../pages/user/UserHome";
 import Explore from "../pages/user/Explore";
+import ProductDetails from "../pages/user/ProductDetails";
 
 import ProtectedRoute from "./ProtectedRoute";
 import RoleRoute from "./RoleRoute";
@@ -46,6 +47,7 @@ function AppRoutes() {
 
                 <Route element={<ProtectedRoute />}>
                     <Route element={<AppLayout />}>
+
                         {/* USER */}
 
                         <Route
@@ -63,6 +65,13 @@ function AppRoutes() {
                             <Route
                                 path="/app/explore"
                                 element={<Explore />}
+                            />
+
+                            <Route
+                                path="/app/products/:id"
+                                element={
+                                    <ProductDetails />
+                                }
                             />
                         </Route>
 
@@ -89,6 +98,7 @@ function AppRoutes() {
                         >
                             {/* Admin routes coming next */}
                         </Route>
+
                     </Route>
                 </Route>
 
