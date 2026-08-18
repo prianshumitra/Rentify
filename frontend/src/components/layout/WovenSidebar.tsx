@@ -107,7 +107,7 @@ function WovenSidebar() {
                 ═════════════════════════════ */}
 
                 <div className="relative z-10 flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full bg-[var(--color-ink)] shadow-[0_5px_14px_rgba(23,23,23,0.16),inset_0_1px_0_rgba(255,255,255,0.08)]">
-                    <span className="h-[9px] w-[9px] rounded-full bg-[var(--color-accent)] shadow-[0_0_12px_rgba(196,91,60,0.35)]" />
+                    <img src="/favicon.svg" alt="Rentify Logo" className="h-[28px] w-[28px]" style={{ filter: 'invert(1) brightness(2)' }} />
                 </div>
 
                 {/* ═════════════════════════════
