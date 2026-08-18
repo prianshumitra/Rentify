@@ -1,3 +1,5 @@
+import logo from "../../assets/logo.jpg";
+
 function HomeFooter() {
     return (
         <footer className="relative bg-[var(--color-ink)] text-[var(--color-ivory)]">
@@ -6,7 +8,7 @@ function HomeFooter() {
                     {/* Brand */}
                     <div>
                         <div className="flex items-center gap-3">
-                            <span className="h-2 w-2 rounded-full bg-[var(--color-accent)]" />
+                            <img src={logo} alt="Rentify Logo" className="h-6 w-auto" />
 
                             <span className="text-sm font-semibold tracking-[-0.01em]">
                                 RENTIFY

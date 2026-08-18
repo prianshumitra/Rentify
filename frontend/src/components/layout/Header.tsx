@@ -1,4 +1,5 @@
 import { Menu } from "lucide-react";
+import logo from "../../assets/logo.jpg";
 
 function Header() {
     return (
@@ -11,7 +12,7 @@ function Header() {
                     aria-label="Rentify home"
                     className="group flex items-center gap-3"
                 >
-                    <span className="h-2 w-2 rounded-full bg-[var(--color-accent)] transition-transform duration-300 group-hover:scale-125" />
+                    <img src={logo} alt="Rentify Logo" className="h-8 w-auto transition-transform duration-300 group-hover:scale-105" />
 
                     <span className="text-sm font-semibold tracking-[0.02em]">
                         RENTIFY

@@ -7,6 +7,7 @@ import {
     Settings,
     User,
 } from "lucide-react";
+import logo from "../../assets/logo.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
@@ -107,7 +108,7 @@ function WovenSidebar() {
                 ═════════════════════════════ */}
 
                 <div className="relative z-10 flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full bg-[var(--color-ink)] shadow-[0_5px_14px_rgba(23,23,23,0.16),inset_0_1px_0_rgba(255,255,255,0.08)]">
-                    <img src="/favicon.svg" alt="Rentify Logo" className="h-[28px] w-[28px]" style={{ filter: 'invert(1) brightness(2)' }} />
+                    <img src={logo} alt="Logo" className="h-6 w-auto" />
                 </div>
 
                 {/* ═════════════════════════════

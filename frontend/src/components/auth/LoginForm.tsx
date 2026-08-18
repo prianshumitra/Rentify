@@ -21,8 +21,7 @@ function LoginForm() {
             await login(email.trim(), password);
 
             console.log("Login successful");
-
-            window.location.href = "/";
+            window.location.href = "/app";
         } catch (err: any) {
             console.error("Login failed:", err);
             console.error("Status:", err?.response?.status);

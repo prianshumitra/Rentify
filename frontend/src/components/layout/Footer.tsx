@@ -1,3 +1,5 @@
+import logo from "../../assets/logo.jpg";
+
 function Footer() {
     return (
         <footer className="border-t border-white/10 bg-[var(--color-ink)] text-[var(--color-ivory)]">
@@ -7,7 +9,7 @@ function Footer() {
                     {/* Brand */}
                     <div>
                         <div className="flex items-center gap-3">
-                            <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
+                            <img src={logo} alt="Rentify Logo" className="h-6 w-auto" />
 
                             <span className="text-sm font-semibold tracking-[0.02em]">
                                 RENTIFY

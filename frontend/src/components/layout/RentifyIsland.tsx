@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logo from "../../assets/logo.jpg";
 import {
     Bell,
     Compass,
@@ -85,7 +86,7 @@ function RentifyIsland() {
                                 className="flex items-center gap-3"
                                 aria-label="Toggle navigation"
                             >
-                                <span className="h-2 w-2 rounded-full bg-[var(--color-accent)]" />
+                                <img src={logo} alt="Rentify Logo" className="h-5 w-auto" />
 
                                 <span className="text-xs font-semibold tracking-[-0.01em]">
                                     RENTIFY
