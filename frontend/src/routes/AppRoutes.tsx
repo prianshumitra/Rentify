@@ -10,7 +10,9 @@ import AppLayout from "../components/layout/AppLayout";
 import Loom from "../pages/loom/Loom";
 import Login from "../pages/public/Login";
 import Register from "../pages/public/Register";
+
 import UserHome from "../pages/user/UserHome";
+import Explore from "../pages/user/Explore";
 
 import ProtectedRoute from "./ProtectedRoute";
 import RoleRoute from "./RoleRoute";
@@ -44,9 +46,7 @@ function AppRoutes() {
 
                 <Route element={<ProtectedRoute />}>
                     <Route element={<AppLayout />}>
-                        {/* ─────────────────────────
-                            USER
-                        ───────────────────────── */}
+                        {/* USER */}
 
                         <Route
                             element={
@@ -59,11 +59,14 @@ function AppRoutes() {
                                 path="/app"
                                 element={<UserHome />}
                             />
+
+                            <Route
+                                path="/app/explore"
+                                element={<Explore />}
+                            />
                         </Route>
 
-                        {/* ─────────────────────────
-                            VENDOR
-                        ───────────────────────── */}
+                        {/* VENDOR */}
 
                         <Route
                             element={
@@ -72,12 +75,10 @@ function AppRoutes() {
                                 />
                             }
                         >
-                            {/* Vendor pages will be added here */}
+                            {/* Vendor routes coming next */}
                         </Route>
 
-                        {/* ─────────────────────────
-                            ADMIN
-                        ───────────────────────── */}
+                        {/* ADMIN */}
 
                         <Route
                             element={
@@ -86,7 +87,7 @@ function AppRoutes() {
                                 />
                             }
                         >
-                            {/* Admin pages will be added here */}
+                            {/* Admin routes coming next */}
                         </Route>
                     </Route>
                 </Route>
