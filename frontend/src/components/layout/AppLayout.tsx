@@ -1,22 +1,15 @@
-import type { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
 
-import Header from "./Header";
-import Footer from "./Footer";
+import RentifyIsland from "./RentifyIsland";
 
-interface AppLayoutProps {
-    children: ReactNode;
-}
-
-function AppLayout({ children }: AppLayoutProps) {
+function AppLayout() {
     return (
-        <div className="flex min-h-screen flex-col bg-[var(--color-ivory)] text-[var(--color-ink)]">
-            <Header />
+        <div className="min-h-screen bg-[var(--color-ivory)] text-[var(--color-ink)]">
+            <RentifyIsland />
 
-            <main className="flex-1">
-                {children}
+            <main className="min-h-screen pt-24">
+                <Outlet />
             </main>
-
-            <Footer />
         </div>
     );
 }

@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from "react";
 import { ArrowUp } from "lucide-react";
 
-import { login } from "../../api/auth.api";
+import { useAuth } from "../../context/AuthContext";
 
 function LoginForm() {
+    const { login } = useAuth();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -16,14 +18,34 @@ function LoginForm() {
         setIsLoading(true);
 
         try {
-            const response = await login(email, password);
-
-            localStorage.setItem("access_token", response.access_token);
+            await login(email.trim(), password);
 
             console.log("Login successful");
-        } catch (err) {
-            console.error(err);
-            setError("Unable to sign in. Please check your credentials.");
+
+            window.location.href = "/";
+        } catch (err: any) {
+            console.error("Login failed:", err);
+            console.error("Status:", err?.response?.status);
+            console.error("Response:", err?.response?.data);
+
+            const detail = err?.response?.data?.detail;
+
+            if (typeof detail === "string") {
+                setError(detail);
+            } else if (Array.isArray(detail)) {
+                setError(
+                    detail
+                        .map((item) => item?.msg)
+                        .filter(Boolean)
+                        .join(", ") || "Unable to sign in.",
+                );
+            } else if (err?.message) {
+                setError(err.message);
+            } else {
+                setError(
+                    "Unable to sign in. Please check your credentials.",
+                );
+            }
         } finally {
             setIsLoading(false);
         }
@@ -45,7 +67,9 @@ function LoginForm() {
                         id="email"
                         type="email"
                         value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        onChange={(event) =>
+                            setEmail(event.target.value)
+                        }
                         placeholder="you@example.com"
                         autoComplete="email"
                         required
@@ -66,7 +90,9 @@ function LoginForm() {
                         id="password"
                         type="password"
                         value={password}
-                        onChange={(event) => setPassword(event.target.value)}
+                        onChange={(event) =>
+                            setPassword(event.target.value)
+                        }
                         placeholder="Enter your password"
                         autoComplete="current-password"
                         required
