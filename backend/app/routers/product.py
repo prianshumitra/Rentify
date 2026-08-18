@@ -17,6 +17,7 @@ from app.schemas.product import (
 from app.services.product import (
     create_product,
     deactivate_product,
+    get_product_by_id,
     get_vendor_product,
     list_products,
     update_product,
@@ -72,16 +73,15 @@ def list_products_endpoint(
     "/{product_id}",
     response_model=ProductOut,
 )
-def get_vendor_product_endpoint(
+def get_product_endpoint(
     product_id: UUID,
-    current_vendor: User = Depends(get_current_vendor),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     try:
-        product = get_vendor_product(
+        product = get_product_by_id(
             db=db,
             product_id=product_id,
-            vendor=current_vendor,
         )
 
         return product

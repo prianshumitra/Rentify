@@ -38,6 +38,11 @@ def register(
         )
 
 
+from app.schemas.user import Token, UserCreate, UserOut, UserLogin, UserRoleUpdate
+from app.services.user import create_user, authenticate_user, login_user
+from app.core.security import create_access_token
+
+
 @router.post(
     "/login",
     response_model=Token,
@@ -47,15 +52,19 @@ def login(
     db: Session = Depends(get_db),
 ):
     try:
-        access_token = login_user(
+        user = authenticate_user(
             db=db,
             email=user_data.email,
             password=user_data.password,
+        )
+        access_token = create_access_token(
+            user_id=str(user.id),
         )
 
         return {
             "access_token": access_token,
             "token_type": "bearer",
+            "user": user,
         }
 
     except ValueError as exc:
@@ -73,4 +82,22 @@ def login(
 def get_me(
     current_user: User = Depends(get_current_user),
 ):
+    return current_user
+
+
+@router.patch(
+    "/me/role",
+    response_model=UserOut,
+)
+def update_role(
+    role_data: UserRoleUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    if role_data.is_vendor is not None:
+        current_user.is_vendor = role_data.is_vendor
+    if role_data.is_admin is not None:
+        current_user.is_admin = role_data.is_admin
+    db.commit()
+    db.refresh(current_user)
     return current_user

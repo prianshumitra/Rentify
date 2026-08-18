@@ -30,7 +30,8 @@ def create_user(
         first_name=user_data.first_name,
         last_name=user_data.last_name,
         hashed_password=hash_password(user_data.password),
-        is_admin=False,
+        is_admin=user_data.is_admin,
+        is_vendor=user_data.is_vendor,
         is_active=True,
     )
 

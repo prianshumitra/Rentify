@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.core.security import get_current_vendor
+from app.core.security import get_current_user, get_current_vendor
 from app.db.session import get_db
 from app.models.user import User
 from app.schemas.product_variant import (
@@ -15,6 +15,7 @@ from app.services.product_variant import (
     create_product_variant,
     deactivate_product_variant,
     get_product_variant,
+    list_active_product_variants,
     list_product_variants,
     update_product_variant,
 )
@@ -57,14 +58,13 @@ def create_product_variant_endpoint(
 )
 def list_product_variants_endpoint(
     product_id: UUID,
-    current_vendor: User = Depends(get_current_vendor),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     try:
-        return list_product_variants(
+        return list_active_product_variants(
             db=db,
             product_id=product_id,
-            vendor=current_vendor,
         )
 
     except ValueError as exc:

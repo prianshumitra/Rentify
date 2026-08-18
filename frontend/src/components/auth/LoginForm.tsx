@@ -3,11 +3,14 @@ import { ArrowUp } from "lucide-react";
 
 import { useAuth } from "../../context/AuthContext";
 
+import { updateRole } from "../../api/auth.api";
+
 function LoginForm() {
     const { login } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [targetPortal, setTargetPortal] = useState<"user" | "vendor" | "admin">("user");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -18,10 +21,20 @@ function LoginForm() {
         setIsLoading(true);
 
         try {
-            await login(email.trim(), password);
+            const loggedInUser = await login(email.trim(), password);
 
-            console.log("Login successful");
-            window.location.href = "/app";
+            console.log("Login successful:", loggedInUser);
+
+            if (targetPortal === "admin") {
+                await updateRole(false, true);
+                window.location.href = "/admin";
+            } else if (targetPortal === "vendor") {
+                await updateRole(true, false);
+                window.location.href = "/vendor";
+            } else {
+                await updateRole(false, false);
+                window.location.href = "/app";
+            }
         } catch (err: any) {
             console.error("Login failed:", err);
             console.error("Status:", err?.response?.status);
@@ -52,6 +65,29 @@ function LoginForm() {
 
     return (
         <form onSubmit={handleSubmit} className="w-full">
+            {/* Target Portal Selector */}
+            <div className="mb-5">
+                <label className="mb-1.5 block text-[8px] font-medium uppercase tracking-[0.2em] text-[var(--color-muted)]">
+                    Sign In To Portal
+                </label>
+                <div className="inline-flex items-center gap-0.5 rounded-lg border border-[var(--color-line)] bg-white/40 p-0.5 backdrop-blur-md">
+                    {(["user", "vendor", "admin"] as const).map((portal) => (
+                        <button
+                            key={portal}
+                            type="button"
+                            onClick={() => setTargetPortal(portal)}
+                            className={`rounded-md px-2.5 py-1 text-[7px] font-bold uppercase tracking-[0.14em] transition-all duration-200 ${
+                                targetPortal === portal
+                                    ? "bg-[var(--color-ink)] text-white shadow-xs"
+                                    : "text-[var(--color-muted)] hover:text-[var(--color-ink)]"
+                            }`}
+                        >
+                            {portal === "user" ? "Customer" : portal}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             <div className="space-y-8">
                 {/* Email */}
                 <div className="group border-b border-[var(--color-line)] pb-3 transition-colors duration-300 focus-within:border-[var(--color-accent)]">

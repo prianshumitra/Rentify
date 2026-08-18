@@ -9,6 +9,7 @@ function RegisterForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [accountRole, setAccountRole] = useState<"user" | "vendor" | "admin">("user");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -24,6 +25,8 @@ function RegisterForm() {
                 last_name: lastName.trim(),
                 email: email.trim(),
                 password,
+                is_vendor: accountRole === "vendor",
+                is_admin: accountRole === "admin",
             });
 
             window.location.href = "/login";
@@ -58,6 +61,29 @@ function RegisterForm() {
 
     return (
         <form onSubmit={handleSubmit} className="w-full">
+            {/* Account Role Selector */}
+            <div className="mb-5">
+                <label className="mb-1.5 block text-[8px] font-medium uppercase tracking-[0.2em] text-[var(--color-muted)]">
+                    Register As
+                </label>
+                <div className="inline-flex items-center gap-0.5 rounded-lg border border-[var(--color-line)] bg-white/40 p-0.5 backdrop-blur-md">
+                    {(["user", "vendor", "admin"] as const).map((roleOption) => (
+                        <button
+                            key={roleOption}
+                            type="button"
+                            onClick={() => setAccountRole(roleOption)}
+                            className={`rounded-md px-2.5 py-1 text-[7px] font-bold uppercase tracking-[0.14em] transition-all duration-200 ${
+                                accountRole === roleOption
+                                    ? "bg-[var(--color-ink)] text-white shadow-xs"
+                                    : "text-[var(--color-muted)] hover:text-[var(--color-ink)]"
+                            }`}
+                        >
+                            {roleOption === "user" ? "Customer" : roleOption}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
                 <div className="group border-b border-[var(--color-line)] pb-3 transition-colors duration-300 focus-within:border-[var(--color-accent)]">
                     <label

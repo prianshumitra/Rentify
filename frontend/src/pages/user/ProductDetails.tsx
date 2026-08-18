@@ -21,6 +21,7 @@ import {
 } from "react-router-dom";
 
 import {
+    getProductById,
     getProductVariants,
     getProducts,
 } from "../../api/product.api";
@@ -137,25 +138,15 @@ function ProductDetails() {
                  * Product request
                  */
 
-                const products =
-                    await getProducts();
-
-                console.log(
-                    "Products returned:",
-                    products,
-                );
-
-                const currentProduct =
-                    products.find(
-                        (item) =>
-                            String(item.id) ===
-                            String(id),
-                    );
-
-                console.log(
-                    "Matched product:",
-                    currentProduct,
-                );
+                let currentProduct: Product | null = null;
+                try {
+                    currentProduct = await getProductById(id);
+                } catch {
+                    const products = await getProducts();
+                    currentProduct = products.find(
+                        (item) => String(item.id) === String(id)
+                    ) || null;
+                }
 
                 if (!currentProduct) {
                     setError(
@@ -915,13 +906,36 @@ function ProductDetails() {
 
                         </div>
 
+                        {/* Price summary hint if variant selected */}
+                        {selectedVariant && (
+                            <div className="mt-4 flex items-center justify-between px-2">
+                                <span className="text-[9px] font-medium uppercase tracking-[0.15em] text-[var(--color-ink-soft)]">
+                                    Rental Price
+                                </span>
+                                <span className="text-sm font-medium">
+                                    ₹{Number(selectedVariant.unit_price).toFixed(2)} / ea
+                                </span>
+                            </div>
+                        )}
+
                         {/* Rental CTA */}
 
                         <button
                             type="button"
                             disabled={
-                                !product.is_active
+                                !product.is_active || !selectedVariant
                             }
+                            onClick={() => {
+                                if (selectedVariant) {
+                                    navigate(`/app/products/${product.id}/rent`, {
+                                        state: {
+                                            product,
+                                            variant: selectedVariant,
+                                            quantity
+                                        }
+                                    });
+                                }
+                            }}
                             className="group mt-8 flex w-full items-center justify-between rounded-2xl bg-[var(--color-ink)] px-6 py-5 text-left shadow-[0_20px_40px_rgba(23,23,23,.14)] transition-all duration-500 hover:-translate-y-1 hover:bg-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-40"
                         >
 

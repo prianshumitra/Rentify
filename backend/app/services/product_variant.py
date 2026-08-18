@@ -66,6 +66,7 @@ def create_product_variant(
         manufacturer=variant_data.manufacturer,
         color=variant_data.color,
         size=variant_data.size,
+        unit_price=variant_data.unit_price,
         is_active=True,
     )
 
@@ -74,6 +75,26 @@ def create_product_variant(
     db.refresh(variant)
 
     return variant
+
+
+def list_active_product_variants(
+    db: Session,
+    product_id: UUID,
+) -> list[ProductVariant]:
+
+    product = db.get(Product, product_id)
+
+    if product is None or not product.is_active:
+        raise ValueError("Product not found or inactive.")
+
+    return (
+        db.query(ProductVariant)
+        .filter(
+            ProductVariant.product_id == product.id,
+            ProductVariant.is_active.is_(True),
+        )
+        .all()
+    )
 
 
 def list_product_variants(

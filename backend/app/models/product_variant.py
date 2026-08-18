@@ -1,6 +1,7 @@
+from decimal import Decimal
 from uuid import UUID
 
-from sqlalchemy import Boolean, ForeignKey, String
+from sqlalchemy import Boolean, ForeignKey, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -39,6 +40,12 @@ class ProductVariant(Base):
     size: Mapped[str | None] = mapped_column(
         String(50),
         nullable=True,
+    )
+
+    unit_price: Mapped[Decimal] = mapped_column(
+        Numeric(10, 2),
+        nullable=False,
+        default=Decimal("0.00"),
     )
 
     is_active: Mapped[bool] = mapped_column(

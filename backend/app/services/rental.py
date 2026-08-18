@@ -13,6 +13,7 @@ from app.models.product import Product
 from app.models.product_variant import ProductVariant
 from app.models.rental import Rental, RentalStatus
 from app.models.rental_item import RentalItem
+from app.models.user import User
 from app.services.payment import refund_payment
 
 
@@ -22,7 +23,7 @@ def create_rental(
     variant_id: UUID,
     start_at: datetime,
     end_at: datetime,
-    unit_price: Decimal,
+    unit_price: Decimal | None = None,
     quantity: int = 1,
 ) -> Rental:
 
@@ -47,6 +48,14 @@ def create_rental(
     if not variant.is_active:
         raise ValueError(
             "Product variant is inactive."
+        )
+
+    # Use variant.unit_price for security, ignoring input unit_price if provided
+    actual_unit_price = variant.unit_price
+
+    if actual_unit_price <= 0:
+        raise ValueError(
+            "This variant does not have a valid rental price."
         )
 
     # Find the product that owns the variant.
@@ -95,7 +104,7 @@ def create_rental(
             "Not enough inventory available for the requested period."
         )
 
-    subtotal = unit_price * quantity
+    subtotal = actual_unit_price * quantity
 
     rental = Rental(
         user_id=user_id,
@@ -114,7 +123,7 @@ def create_rental(
         rental_id=rental.id,
         variant_id=variant_id,
         quantity=quantity,
-        unit_price=unit_price,
+        unit_price=actual_unit_price,
         subtotal=subtotal,
     )
 
@@ -244,3 +253,116 @@ def calculate_late_fee(
     return late_fee.quantize(
         Decimal("0.01")
     )
+
+
+def list_user_rentals(
+    db: Session,
+    user: User,
+) -> list[dict]:
+    query = select(Rental)
+    if not user.is_admin:
+        query = query.where(Rental.user_id == user.id)
+
+    rentals = db.scalars(query.order_by(Rental.created_at.desc())).all()
+
+    result = []
+    for r in rentals:
+        items = db.scalars(select(RentalItem).where(RentalItem.rental_id == r.id)).all()
+        item_details = []
+        for item in items:
+            variant = db.get(ProductVariant, item.variant_id)
+            product = db.get(Product, variant.product_id) if variant else None
+            item_details.append({
+                "id": item.id,
+                "variant_id": item.variant_id,
+                "quantity": item.quantity,
+                "unit_price": item.unit_price,
+                "subtotal": item.subtotal,
+                "product_name": product.name if product else "Unknown Product",
+                "variant_sku": variant.sku if variant else "",
+                "variant_brand": variant.brand if variant else "",
+                "variant_color": variant.color if variant else "",
+                "variant_size": variant.size if variant else "",
+            })
+
+        result.append({
+            "id": r.id,
+            "user_id": r.user_id,
+            "start_at": r.start_at,
+            "end_at": r.end_at,
+            "status": r.status,
+            "rental_amount": r.rental_amount,
+            "deposit_amount": r.deposit_amount,
+            "total_amount": r.total_amount,
+            "created_at": r.created_at,
+            "items": item_details,
+        })
+    return result
+
+
+def get_rental_detail(
+    db: Session,
+    rental_id: UUID,
+    user: User,
+) -> dict:
+    rental = db.get(Rental, rental_id)
+    if rental is None:
+        raise ValueError("Rental not found.")
+
+    if not user.is_admin and rental.user_id != user.id:
+        items = db.scalars(select(RentalItem).where(RentalItem.rental_id == rental_id)).all()
+        vendor_owns = False
+        for item in items:
+            variant = db.get(ProductVariant, item.variant_id)
+            if variant:
+                product = db.get(Product, variant.product_id)
+                if product and product.vendor_id == user.id:
+                    vendor_owns = True
+                    break
+        if not vendor_owns:
+            raise ValueError("You do not have permission to view this rental.")
+
+    items = db.scalars(select(RentalItem).where(RentalItem.rental_id == rental_id)).all()
+    item_details = []
+    for item in items:
+        variant = db.get(ProductVariant, item.variant_id)
+        product = db.get(Product, variant.product_id) if variant else None
+        item_details.append({
+            "id": item.id,
+            "variant_id": item.variant_id,
+            "quantity": item.quantity,
+            "unit_price": item.unit_price,
+            "subtotal": item.subtotal,
+            "product_name": product.name if product else "Unknown Product",
+            "product_id": product.id if product else None,
+            "variant_sku": variant.sku if variant else "",
+            "variant_brand": variant.brand if variant else "",
+            "variant_color": variant.color if variant else "",
+            "variant_size": variant.size if variant else "",
+        })
+
+    payments = db.scalars(select(Payment).where(Payment.rental_id == rental_id)).all()
+    payment_details = [
+        {
+            "id": p.id,
+            "payment_type": p.payment_type,
+            "status": p.status,
+            "amount": p.amount,
+            "stripe_payment_id": p.stripe_payment_id,
+        }
+        for p in payments
+    ]
+
+    return {
+        "id": rental.id,
+        "user_id": rental.user_id,
+        "start_at": rental.start_at,
+        "end_at": rental.end_at,
+        "status": rental.status,
+        "rental_amount": rental.rental_amount,
+        "deposit_amount": rental.deposit_amount,
+        "total_amount": rental.total_amount,
+        "created_at": rental.created_at,
+        "items": item_details,
+        "payments": payment_details,
+    }

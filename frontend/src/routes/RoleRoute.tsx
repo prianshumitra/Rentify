@@ -24,11 +24,11 @@ function RoleRoute({ allowedRoles }: RoleRouteProps) {
         return <Navigate to="/login" replace />;
     }
 
-    if (!allowedRoles.includes(role)) {
-        return <Navigate to="/" replace />;
+    if (role === "admin" || allowedRoles.includes(role)) {
+        return <Outlet />;
     }
 
-    return <Outlet />;
+    return <Navigate to="/" replace />;
 }
 
 export default RoleRoute;

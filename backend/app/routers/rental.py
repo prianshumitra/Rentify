@@ -11,13 +11,41 @@ from app.db.session import get_db
 from app.schemas.rental import RentalCreate
 from app.services.rental import (
     create_rental, cancel_rental, mark_overdue_rentals, calculate_late_fee,
-    )
+    list_user_rentals, get_rental_detail,
+)
 
 
 router = APIRouter(
     prefix="/api/v1/rentals",
     tags=["Rentals"],
 )
+
+
+@router.get("/")
+def list_rentals_endpoint(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    return list_user_rentals(db=db, user=current_user)
+
+
+@router.get("/{rental_id}")
+def get_rental_detail_endpoint(
+    rental_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    try:
+        return get_rental_detail(
+            db=db,
+            rental_id=rental_id,
+            user=current_user,
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        )
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)

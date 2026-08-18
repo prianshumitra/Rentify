@@ -14,6 +14,23 @@ import Register from "../pages/public/Register";
 import UserHome from "../pages/user/UserHome";
 import Explore from "../pages/user/Explore";
 import ProductDetails from "../pages/user/ProductDetails";
+import RentalRequest from "../pages/user/RentalRequest";
+import MyRentals from "../pages/user/MyRentals";
+import RentalDetails from "../pages/user/RentalDetails";
+import MyProfile from "../pages/user/MyProfile";
+import Activity from "../pages/user/Activity";
+
+import VendorDashboard from "../pages/vendor/VendorDashboard";
+import VendorProducts from "../pages/vendor/Products";
+import VendorInventory from "../pages/vendor/Inventory";
+import VendorRentals from "../pages/vendor/Rentals";
+
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminUsers from "../pages/admin/Users";
+import AdminProducts from "../pages/admin/Products";
+import AdminRentals from "../pages/admin/Rentals";
+import AdminPayments from "../pages/admin/Payments";
+import AdminInventory from "../pages/admin/Inventory";
 
 import ProtectedRoute from "./ProtectedRoute";
 import RoleRoute from "./RoleRoute";
@@ -73,6 +90,41 @@ function AppRoutes() {
                                     <ProductDetails />
                                 }
                             />
+
+                            <Route
+                                path="/app/products/:productId/rent"
+                                element={
+                                    <RentalRequest />
+                                }
+                            />
+
+                            <Route
+                                path="/app/rentals"
+                                element={
+                                    <MyRentals />
+                                }
+                            />
+
+                            <Route
+                                path="/app/rentals/:rentalId"
+                                element={
+                                    <RentalDetails />
+                                }
+                            />
+
+                            <Route
+                                path="/app/activity"
+                                element={
+                                    <Activity />
+                                }
+                            />
+
+                            <Route
+                                path="/app/profile"
+                                element={
+                                    <MyProfile />
+                                }
+                            />
                         </Route>
 
                         {/* VENDOR */}
@@ -84,7 +136,10 @@ function AppRoutes() {
                                 />
                             }
                         >
-                            {/* Vendor routes coming next */}
+                            <Route path="/vendor" element={<VendorDashboard />} />
+                            <Route path="/vendor/products" element={<VendorProducts />} />
+                            <Route path="/vendor/inventory" element={<VendorInventory />} />
+                            <Route path="/vendor/rentals" element={<VendorRentals />} />
                         </Route>
 
                         {/* ADMIN */}
@@ -96,7 +151,12 @@ function AppRoutes() {
                                 />
                             }
                         >
-                            {/* Admin routes coming next */}
+                            <Route path="/admin" element={<AdminDashboard />} />
+                            <Route path="/admin/users" element={<AdminUsers />} />
+                            <Route path="/admin/products" element={<AdminProducts />} />
+                            <Route path="/admin/rentals" element={<AdminRentals />} />
+                            <Route path="/admin/payments" element={<AdminPayments />} />
+                            <Route path="/admin/inventory" element={<AdminInventory />} />
                         </Route>
 
                     </Route>

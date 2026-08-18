@@ -13,6 +13,8 @@ import LoomCard from "../../components/ui/LoomCard";
 import HomeFooter from "../../components/layout/HomeFooter";
 import { useAuth } from "../../context/AuthContext";
 
+import { getRentals, type RentalDetail } from "../../api/rentals.api";
+
 interface MousePosition {
     x: number;
     y: number;
@@ -20,6 +22,7 @@ interface MousePosition {
 
 function UserHome() {
     const { user } = useAuth();
+    const [rentals, setRentals] = useState<RentalDetail[]>([]);
 
     const firstName = user?.first_name || "there";
 
@@ -28,6 +31,18 @@ function UserHome() {
             x: 0,
             y: 0,
         });
+
+    useEffect(() => {
+        async function fetchUserRentals() {
+            try {
+                const data = await getRentals();
+                setRentals(data);
+            } catch (err) {
+                console.error("Failed to fetch user rentals:", err);
+            }
+        }
+        fetchUserRentals();
+    }, []);
 
     useEffect(() => {
         const handleMouseMove = (
@@ -399,22 +414,23 @@ function UserHome() {
                                     </p>
 
                                     <p className="mt-2 text-6xl font-medium tracking-[-0.07em]">
-                                        00
+                                        {String(rentals.length).padStart(2, "0")}
                                     </p>
 
                                     <p className="mt-4 max-w-xs text-sm leading-6 text-white/50">
-                                        Nothing is currently woven
-                                        into your rental space.
+                                        {rentals.length > 0
+                                            ? `${rentals.length} active rental item(s) in your space.`
+                                            : "Nothing is currently woven into your rental space."}
                                     </p>
 
                                 </div>
 
                                 <Link
-                                    to="/app/explore"
+                                    to="/app/rentals"
                                     className="group mt-7 flex w-fit items-center gap-2 text-[9px] uppercase tracking-[0.18em] !text-white/70 transition-colors hover:!text-white"
                                 >
 
-                                    Find something
+                                    View my rentals
 
                                     <ArrowUpRight
                                         size={13}

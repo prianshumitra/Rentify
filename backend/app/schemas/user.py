@@ -8,6 +8,8 @@ class UserCreate(BaseModel):
     password: str
     first_name: str
     last_name: str
+    is_vendor: bool = False
+    is_admin: bool = False
 
 
 class UserLogin(BaseModel):
@@ -29,6 +31,12 @@ class UserOut(BaseModel):
     }
 
 
+class UserRoleUpdate(BaseModel):
+    is_vendor: bool | None = None
+    is_admin: bool | None = None
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str
+    user: UserOut | None = None

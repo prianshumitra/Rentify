@@ -16,5 +16,6 @@ export interface ProductVariant {
     manufacturer: string | null;
     color: string | null;
     size: string | null;
+    unit_price: number;
     is_active: boolean;
 }

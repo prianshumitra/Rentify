@@ -13,6 +13,14 @@ export async function getProducts(): Promise<Product[]> {
     return response.data;
 }
 
+export async function getProductById(productId: string): Promise<Product> {
+    const response = await apiClient.get<Product>(
+        `/products/${productId}`,
+    );
+
+    return response.data;
+}
+
 export async function getProductVariants(
     productId: string,
 ): Promise<ProductVariant[]> {

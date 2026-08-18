@@ -40,6 +40,19 @@ def create_product(
     return product
 
 
+def get_product_by_id(
+    db: Session,
+    product_id: UUID,
+) -> Product:
+
+    product = db.get(Product, product_id)
+
+    if product is None or not product.is_active:
+        raise ValueError("Product not found or inactive.")
+
+    return product
+
+
 def get_vendor_product(
     db: Session,
     product_id: UUID,

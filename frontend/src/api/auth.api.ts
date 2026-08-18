@@ -6,6 +6,8 @@ export interface RegisterData {
     password: string;
     first_name: string;
     last_name: string;
+    is_vendor?: boolean;
+    is_admin?: boolean;
 }
 
 export async function login(
@@ -36,6 +38,15 @@ export async function register(
 
 export async function getCurrentUser(): Promise<User> {
     const response = await apiClient.get<User>("/users/me");
+
+    return response.data;
+}
+
+export async function updateRole(is_vendor?: boolean, is_admin?: boolean): Promise<User> {
+    const response = await apiClient.patch<User>("/users/me/role", {
+        is_vendor,
+        is_admin,
+    });
 
     return response.data;
 }
