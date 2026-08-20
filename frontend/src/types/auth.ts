@@ -5,11 +5,13 @@ export interface User {
     email: string;
     first_name: string;
     last_name: string;
+    phone_number?: string | null;
 
     is_admin: boolean;
     is_vendor: boolean;
     is_active: boolean;
 }
+
 
 export interface LoginResponse {
     access_token: string;

@@ -23,6 +23,25 @@
   --color-accent: #c45b3c;
   --color-accent-soft: rgba(196, 91, 60, 0.12);
 
+  /* Subtle Soft Palette */
+  --color-sage: #3d7054;
+  --color-sage-soft: #eaf3ed;
+  --color-sage-border: #b8d9c5;
+
+  --color-craft: #eae2d1;
+  --color-craft-soft: #f8f4eb;
+
+  --color-slate-blue: #2c4a6f;
+  --color-slate-soft: #edf3fa;
+  --color-slate-border: #c2d6ed;
+
+  --color-amber-soft: #fef7e7;
+  --color-amber-border: #f8db9f;
+
+  --color-rose-soft: #fdf3f3;
+  --color-rose-border: #f7cac9;
+
+
   /* ─────────────────────────────
      TYPOGRAPHY
      ───────────────────────────── */
@@ -214,8 +233,19 @@ svg {
 }
 
 /* ─────────────────────────────
+   TACTILE CANVAS TEXTURE
+   ───────────────────────────── */
+
+.bg-tactile-pattern {
+  background-color: var(--color-ivory);
+  background-image: radial-gradient(rgba(23, 23, 23, 0.055) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ─────────────────────────────
    SELECTION
    ───────────────────────────── */
+
 
 ::selection {
   background: var(--color-ink);
@@ -232,8 +262,25 @@ svg {
 }
 
 /* ─────────────────────────────
-   REDUCED MOTION
+   SILK PAGE TRANSITION ANIMATION
    ───────────────────────────── */
+
+@keyframes pageFadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-page-transition {
+  animation: pageFadeSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
 
 @media (prefers-reduced-motion: reduce) {
   *,

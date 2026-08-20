@@ -25,7 +25,9 @@ interface AuthContextType {
     isLoading: boolean;
     login: (email: string, password: string) => Promise<User>;
     logout: () => void;
+    updateUser: (updatedUser: Partial<User>) => void;
 }
+
 
 const AuthContext = createContext<AuthContextType | undefined>(
     undefined,
@@ -131,6 +133,10 @@ export function AuthProvider({
         setRole(null);
     }
 
+    function updateUser(updatedFields: Partial<User>) {
+        setUser((prev) => (prev ? { ...prev, ...updatedFields } : null));
+    }
+
     return (
         <AuthContext.Provider
             value={{
@@ -141,11 +147,13 @@ export function AuthProvider({
                 isLoading,
                 login,
                 logout,
+                updateUser,
             }}
         >
             {children}
         </AuthContext.Provider>
     );
+
 }
 
 export function useAuth(): AuthContextType {

@@ -5,6 +5,8 @@ import { getProductVariants, getProducts } from "../../api/product.api";
 import { createRental } from "../../api/rentals.api";
 import type { Product, ProductVariant } from "../../types/product";
 
+import StripePaymentModal from "../../components/payment/StripePaymentModal";
+
 function RentalRequest() {
     const { productId } = useParams<{ productId: string }>();
     const location = useLocation();
@@ -23,6 +25,7 @@ function RentalRequest() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
     const [successData, setSuccessData] = useState<any>(null);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
     useEffect(() => {
         async function loadMissingData() {
@@ -84,11 +87,19 @@ function RentalRequest() {
                 quantity
             });
             setSuccessData(result);
+            setIsPaymentModalOpen(true);
         } catch (err: any) {
             setError(err.response?.data?.detail || "Failed to create rental. Please try again.");
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handlePaymentSuccess = () => {
+        setSuccessData((prev: any) => ({
+            ...prev,
+            status: "confirmed",
+        }));
     };
 
     if (isLoading) {
@@ -100,6 +111,7 @@ function RentalRequest() {
     }
 
     if (successData) {
+        const isPaid = successData.status.toLowerCase() === "confirmed";
         return (
             <main className="relative min-h-screen overflow-hidden bg-[var(--color-ivory)]">
                 <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -112,8 +124,14 @@ function RentalRequest() {
                         <Check size={32} strokeWidth={1.5} />
                     </div>
                     
-                    <h1 className="mt-10 text-4xl font-medium tracking-[-0.05em]">Rental requested.</h1>
-                    <p className="mt-4 text-sm text-[var(--color-muted)]">Your rental has been created and is pending payment.</p>
+                    <h1 className="mt-10 text-4xl font-medium tracking-[-0.05em]">
+                        {isPaid ? "Rental confirmed!" : "Rental requested."}
+                    </h1>
+                    <p className="mt-4 text-sm text-[var(--color-muted)]">
+                        {isPaid
+                            ? "Your Stripe payment was completed successfully and your rental is confirmed."
+                            : "Your rental has been created and is pending payment."}
+                    </p>
 
                     <div className="mt-12 rounded-3xl border border-[var(--color-line)] bg-white/40 p-8 text-left backdrop-blur-xl">
                         <div className="space-y-6">
@@ -140,6 +158,14 @@ function RentalRequest() {
                     </div>
 
                     <div className="mt-12 flex flex-col gap-4">
+                        {!isPaid && (
+                            <button
+                                onClick={() => setIsPaymentModalOpen(true)}
+                                className="inline-flex items-center justify-center gap-3 rounded-2xl bg-[var(--color-accent)] px-8 py-5 text-[10px] font-medium uppercase tracking-[0.2em] !text-white shadow-lg hover:bg-[var(--color-ink)] transition-all"
+                            >
+                                Pay with Stripe (₹{Number(successData.total_amount).toFixed(2)})
+                            </button>
+                        )}
                         <Link 
                             to="/app/explore"
                             className="inline-flex items-center justify-center gap-3 rounded-2xl bg-[var(--color-ink)] px-8 py-5 text-[10px] font-medium uppercase tracking-[0.2em] !text-white shadow-lg hover:bg-[var(--color-accent)] transition-all"
@@ -148,9 +174,20 @@ function RentalRequest() {
                         </Link>
                     </div>
                 </div>
+
+                {successData && (
+                    <StripePaymentModal
+                        isOpen={isPaymentModalOpen}
+                        onClose={() => setIsPaymentModalOpen(false)}
+                        rentalId={successData.id}
+                        amount={Number(successData.total_amount)}
+                        onSuccess={handlePaymentSuccess}
+                    />
+                )}
             </main>
         );
     }
+
 
     const subtotal = variant ? Number(variant.unit_price) * quantity : 0;
 
@@ -177,8 +214,14 @@ function RentalRequest() {
                 <div className="grid gap-12 lg:grid-cols-[1fr_400px]">
                     <div className="space-y-10">
                         <section>
-                            <p className="text-[9px] font-medium uppercase tracking-[0.2em] text-[var(--color-accent)]">Step 01</p>
-                            <h1 className="mt-4 text-4xl font-medium tracking-tight">Rental Request</h1>
+                            <div className="flex items-center gap-2.5 mb-2">
+                                <span className="h-px w-8 bg-[var(--color-accent)]" />
+                                <span className="text-[8.5px] font-semibold uppercase tracking-[0.28em] text-[var(--color-muted)]">
+                                    RENTAL / CHECKOUT RESERVATION
+                                </span>
+                            </div>
+                            <h1 className="mt-2 text-4xl font-medium tracking-tight">Rental Request</h1>
+
                             
                             {product && variant && (
                                 <div className="mt-8 flex items-start gap-6 rounded-3xl border border-[var(--color-line)] bg-white/30 p-6 backdrop-blur-md">

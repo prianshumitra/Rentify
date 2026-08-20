@@ -84,23 +84,24 @@ function WovenSidebar2() {
                 <div className="relative z-10 mt-5 flex flex-col items-center gap-5">
                     <button
                         type="button"
-                        onClick={() => handleNavigation("/app/profile")}
+                        onClick={() => handleNavigation("/vendor/profile")}
                         className="group/item flex w-[58px] flex-col items-center"
                     >
                         <span className={`flex h-[42px] w-[42px] items-center justify-center rounded-[12px] border transition-all duration-300 ${
-                            location.pathname === "/app/profile"
+                            location.pathname === "/vendor/profile"
                                 ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-[var(--color-ivory)] shadow-[0_5px_12px_rgba(23,23,23,0.16)]"
                                 : "border-transparent text-[var(--color-ink)] hover:-translate-y-0.5 hover:border-white/70 hover:bg-[rgba(255,255,255,0.42)] hover:shadow-[0_5px_15px_rgba(23,23,23,0.08),inset_0_1px_0_rgba(255,255,255,0.7)]"
                         }`}>
                             <User size={18} strokeWidth={1.5} />
                         </span>
                         <span className={`mt-1.5 text-[7px] font-semibold uppercase tracking-[0.12em] ${
-                            location.pathname === "/app/profile" ? "text-[var(--color-accent)]" : "text-[var(--color-ink-soft)]"
+                            location.pathname === "/vendor/profile" ? "text-[var(--color-accent)]" : "text-[var(--color-ink-soft)]"
                         }`}>
                             Profile
                         </span>
                     </button>
                 </div>
+
 
                 {/* Logout */}
                 <button

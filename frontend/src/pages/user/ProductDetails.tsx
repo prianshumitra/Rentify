@@ -435,9 +435,13 @@ function ProductDetails() {
 
                     </button>
 
-                    <span className="hidden text-[9px] uppercase tracking-[0.24em] text-[var(--color-muted)] sm:block">
-                        Rental / Product
-                    </span>
+                    <div className="flex items-center gap-2.5">
+                        <span className="h-px w-6 bg-[var(--color-accent)]" />
+                        <span className="text-[8.5px] font-semibold uppercase tracking-[0.28em] text-[var(--color-muted)]">
+                            RENTAL / PRODUCT SPECS
+                        </span>
+                    </div>
+
 
                 </div>
 

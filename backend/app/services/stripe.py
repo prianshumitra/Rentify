@@ -25,3 +25,7 @@ def create_refund(payment_intent_id: str):
     )
 
     return refund
+
+def get_payment_intent(payment_intent_id: str):
+    payment_intent = stripe_client.v1.payment_intents.retrieve(payment_intent_id)
+    return payment_intent

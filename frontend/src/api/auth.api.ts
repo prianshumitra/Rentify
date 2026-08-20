@@ -50,3 +50,8 @@ export async function updateRole(is_vendor?: boolean, is_admin?: boolean): Promi
 
     return response.data;
 }
+
+export async function updateUserProfile(data: { phone_number?: string; first_name?: string; last_name?: string }): Promise<User> {
+    const response = await apiClient.patch<User>("/users/me", data);
+    return response.data;
+}

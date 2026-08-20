@@ -104,14 +104,11 @@ function AdminDashboard() {
                 {/* macOS Toolbar Card */}
                 <LoomCard offset={true} className="w-fit">
                     <div className="flex items-center gap-2 px-3.5 py-2.5">
-                        <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57] border border-black/10" />
-                        <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e] border border-black/10" />
-                        <span className="h-2.5 w-2.5 rounded-full bg-[#28c840] border border-black/10" />
-                        <span className="ml-2.5 h-3.5 w-px bg-[var(--color-line-soft)]" />
                         <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-[var(--color-muted)]">
                             ADMIN SUPERUSER ACCESS // ACTIVE
                         </span>
                     </div>
+
                 </LoomCard>
 
                 {/* KPI Metrics Cards */}

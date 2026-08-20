@@ -24,6 +24,10 @@ import VendorDashboard from "../pages/vendor/VendorDashboard";
 import VendorProducts from "../pages/vendor/Products";
 import VendorInventory from "../pages/vendor/Inventory";
 import VendorRentals from "../pages/vendor/Rentals";
+import VendorProfile from "../pages/vendor/VendorProfile";
+import AddProduct from "../pages/vendor/AddProduct";
+
+
 
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminUsers from "../pages/admin/Users";
@@ -138,9 +142,13 @@ function AppRoutes() {
                         >
                             <Route path="/vendor" element={<VendorDashboard />} />
                             <Route path="/vendor/products" element={<VendorProducts />} />
+                            <Route path="/vendor/products/new" element={<AddProduct />} />
                             <Route path="/vendor/inventory" element={<VendorInventory />} />
                             <Route path="/vendor/rentals" element={<VendorRentals />} />
+                            <Route path="/vendor/profile" element={<VendorProfile />} />
                         </Route>
+
+
 
                         {/* ADMIN */}
 

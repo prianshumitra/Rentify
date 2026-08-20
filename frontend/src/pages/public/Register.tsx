@@ -322,17 +322,7 @@ function Register() {
 
                                 <div className="relative flex h-14 items-center border-b border-black/[0.07] bg-white/25 px-5">
 
-                                    {/* Traffic lights */}
 
-                                    <div className="flex items-center gap-2">
-
-                                        <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57] shadow-[inset_0_0_0_1px_rgba(0,0,0,.08)]" />
-
-                                        <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e] shadow-[inset_0_0_0_1px_rgba(0,0,0,.08)]" />
-
-                                        <span className="h-2.5 w-2.5 rounded-full bg-[#28c840] shadow-[inset_0_0_0_1px_rgba(0,0,0,.08)]" />
-
-                                    </div>
 
                                     {/* Center title */}
 
