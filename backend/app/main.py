@@ -21,6 +21,8 @@ app = FastAPI(
 )
 
 origins = [
+    "https://rentify-gamma-five.vercel.app",
+    "https://rentify-gamma-five.vercel.app/",
     "https://rentify-git-main-prianshumitras-projects.vercel.app",
     "https://rentify-git-main-prianshumitras-projects.vercel.app/",
     "http://localhost:5173",
@@ -36,7 +38,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 
 app.include_router(availability_router)
