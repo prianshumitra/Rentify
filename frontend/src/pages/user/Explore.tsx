@@ -161,7 +161,7 @@ function Explore() {
             </div>
 
             {/* CONTENT (COMPACT SCALED LAYOUT) */}
-            <div className="relative z-10 mx-auto max-w-[var(--content-width)] px-[var(--content-padding)] pb-14 pt-16">
+            <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full pb-14 pt-16">
 
                 {/* EDITORIAL HEADER */}
                 <header className="mb-4">
@@ -324,18 +324,16 @@ function Explore() {
                             <div className="flex items-center rounded-xl bg-stone-200/50 p-0.5 border border-stone-300/40">
                                 <button
                                     onClick={() => setViewMode("grid")}
-                                    className={`p-1.5 rounded-lg transition-all ${
-                                        viewMode === "grid" ? "bg-white text-[var(--color-ink)] shadow-xs" : "text-[var(--color-muted)] hover:text-[var(--color-ink)]"
-                                    }`}
+                                    className={`p-1.5 rounded-lg transition-all ${viewMode === "grid" ? "bg-white text-[var(--color-ink)] shadow-xs" : "text-[var(--color-muted)] hover:text-[var(--color-ink)]"
+                                        }`}
                                     title="Grid View"
                                 >
                                     <LayoutGrid size={13} />
                                 </button>
                                 <button
                                     onClick={() => setViewMode("list")}
-                                    className={`p-1.5 rounded-lg transition-all ${
-                                        viewMode === "list" ? "bg-white text-[var(--color-ink)] shadow-xs" : "text-[var(--color-muted)] hover:text-[var(--color-ink)]"
-                                    }`}
+                                    className={`p-1.5 rounded-lg transition-all ${viewMode === "list" ? "bg-white text-[var(--color-ink)] shadow-xs" : "text-[var(--color-muted)] hover:text-[var(--color-ink)]"
+                                        }`}
                                     title="List View"
                                 >
                                     <List size={13} />
@@ -352,11 +350,10 @@ function Explore() {
                                 <button
                                     key={tag.label}
                                     onClick={() => handleTagClick(tag.query)}
-                                    className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-[7.5px] font-semibold uppercase tracking-wider transition-all shadow-xs ${
-                                        isActive
-                                            ? "bg-[var(--color-accent)] border-[var(--color-accent)] !text-white shadow-sm scale-[1.02]"
-                                            : "border-black/10 bg-white/60 text-[var(--color-muted)] hover:bg-white hover:text-[var(--color-ink)]"
-                                    }`}
+                                    className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-[7.5px] font-semibold uppercase tracking-wider transition-all shadow-xs ${isActive
+                                        ? "bg-[var(--color-accent)] border-[var(--color-accent)] !text-white shadow-sm scale-[1.02]"
+                                        : "border-black/10 bg-white/60 text-[var(--color-muted)] hover:bg-white hover:text-[var(--color-ink)]"
+                                        }`}
                                 >
                                     <span>{tag.label}</span>
                                 </button>

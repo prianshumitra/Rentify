@@ -61,17 +61,17 @@ function MyProfile() {
     };
 
     return (
-        <main className="relative min-h-screen overflow-hidden bg-[var(--color-ivory)] px-5 pb-24 pt-20 text-[var(--color-ink)]">
+        <main className="relative min-h-screen overflow-hidden bg-[var(--color-ivory)] px-4 pb-20 pt-16 sm:px-6 lg:px-8 sm:pt-20 text-[var(--color-ink)]">
             {/* Ambient Warm Loom Background Glows */}
             <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-                <div className="absolute left-[8%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
-                <div className="absolute right-[8%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
+                <div className="absolute left-[4%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
+                <div className="absolute right-[4%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
                 <div className="absolute left-0 top-[22%] h-px w-full bg-[var(--color-line-soft)]" />
                 <div className="absolute left-1/3 top-[10%] h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-[var(--color-accent)]/[0.035] blur-[120px]" />
                 <div className="absolute right-1/4 top-[40%] h-[400px] w-[400px] rounded-full bg-amber-500/[0.03] blur-[100px]" />
             </div>
 
-            <div className="relative z-10 mx-auto max-w-6xl space-y-6">
+            <div className="relative z-10 mx-auto max-w-7xl w-full space-y-6">
 
                 {/* ═════════════════════════════════════════════════════════
                     EDITORIAL HEADER WITH VIP STATUS BEACON

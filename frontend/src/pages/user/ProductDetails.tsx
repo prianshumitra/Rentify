@@ -261,7 +261,7 @@ function ProductDetails() {
                     <div className="absolute left-0 top-[40%] h-px w-full bg-[var(--color-line-soft)]" />
                 </div>
 
-                <div className="relative z-10 mx-auto max-w-[var(--content-width)] px-[var(--content-padding)] pb-24 pt-24">
+                <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full pb-24 pt-20">
 
                     <div className="mb-10 h-3 w-28 animate-pulse rounded-full bg-[var(--color-line-soft)]" />
 
@@ -406,7 +406,7 @@ function ProductDetails() {
 
             </div>
 
-            <div className="relative z-10 mx-auto max-w-[var(--content-width)] px-[var(--content-padding)] pb-28 pt-20">
+            <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full pb-24 pt-20">
 
                 {/* ═══════════════════════════════
                     BACK

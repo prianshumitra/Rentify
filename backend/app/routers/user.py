@@ -97,7 +97,13 @@ def update_role(
     if role_data.is_vendor is not None:
         current_user.is_vendor = role_data.is_vendor
     if role_data.is_admin is not None:
+        if role_data.is_admin and current_user.email.lower() != "prianshumitraprivateserver1@gmail.com":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Admin access is strictly restricted to admin only.",
+            )
         current_user.is_admin = role_data.is_admin
+
     db.commit()
     db.refresh(current_user)
-    return current_user
+    return current_user

@@ -1,15 +1,18 @@
 import { useState, type FormEvent } from "react";
 import { ArrowUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import { register } from "../../api/auth.api";
 
 function RegisterForm() {
+    const navigate = useNavigate();
+
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [accountRole, setAccountRole] = useState<"user" | "vendor" | "admin">("user");
+    const [accountRole, setAccountRole] = useState<"user" | "vendor">("user");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -19,17 +22,20 @@ function RegisterForm() {
         setError("");
         setIsLoading(true);
 
+        const cleanEmail = email.trim().toLowerCase();
+
         try {
             await register({
                 first_name: firstName.trim(),
                 last_name: lastName.trim(),
-                email: email.trim(),
+                email: cleanEmail,
                 password,
                 is_vendor: accountRole === "vendor",
-                is_admin: accountRole === "admin",
+                is_admin: false,
             });
 
-            window.location.href = "/login";
+            // Route to login page upon successful registration
+            navigate("/login");
         } catch (err: any) {
             console.error("REGISTRATION ERROR:", err);
             console.error("STATUS:", err?.response?.status);
@@ -38,7 +44,9 @@ function RegisterForm() {
 
             const detail = err?.response?.data?.detail;
 
-            if (typeof detail === "string") {
+            if (err?.code === "ERR_NETWORK" || err?.message === "Network Error") {
+                setError("Unable to connect to the backend API server. Please make sure the Python FastAPI backend is running on port 8000.");
+            } else if (typeof detail === "string") {
                 setError(detail);
             } else if (Array.isArray(detail)) {
                 setError(
@@ -54,6 +62,7 @@ function RegisterForm() {
                     "Unable to create your account. Please try again.",
                 );
             }
+
         } finally {
             setIsLoading(false);
         }
@@ -67,7 +76,7 @@ function RegisterForm() {
                     Register As
                 </label>
                 <div className="inline-flex items-center gap-0.5 rounded-lg border border-[var(--color-line)] bg-white/40 p-0.5 backdrop-blur-md">
-                    {(["user", "vendor", "admin"] as const).map((roleOption) => (
+                    {(["user", "vendor"] as const).map((roleOption) => (
                         <button
                             key={roleOption}
                             type="button"
@@ -83,6 +92,7 @@ function RegisterForm() {
                     ))}
                 </div>
             </div>
+
 
             <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
                 <div className="group border-b border-[var(--color-line)] pb-3 transition-colors duration-300 focus-within:border-[var(--color-accent)]">

@@ -63,16 +63,16 @@ function AdminDashboard() {
     }
 
     return (
-        <main className="relative min-h-screen overflow-hidden bg-[var(--color-ivory)] px-6 pb-24 pt-28 sm:pt-32 lg:pt-36 text-[var(--color-ink)]">
+        <main className="relative min-h-screen overflow-hidden bg-[var(--color-ivory)] px-4 pb-20 pt-16 sm:px-6 lg:px-8 sm:pt-20 text-[var(--color-ink)]">
             {/* Background 3D Grid & Lighting */}
             <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-                <div className="absolute left-[6%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
-                <div className="absolute right-[6%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
-                <div className="absolute left-[6%] top-[18%] h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
+                <div className="absolute left-[4%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
+                <div className="absolute right-[4%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
+                <div className="absolute left-[4%] top-[18%] h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
                 <div className="absolute -left-20 top-1/4 h-72 w-72 rounded-full bg-[var(--color-accent)] opacity-5 blur-[100px]" />
             </div>
 
-            <div className="relative z-10 mx-auto max-w-5xl space-y-8">
+            <div className="relative z-10 mx-auto max-w-7xl w-full space-y-6">
                 {/* Header Bar */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[var(--color-line-soft)] pb-5">
                     <div>

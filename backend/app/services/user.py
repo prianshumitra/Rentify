@@ -16,24 +16,33 @@ def create_user(
     user_data: UserCreate,
 ) -> User:
 
+    clean_email = user_data.email.strip().lower()
+
     existing_user = (
         db.query(User)
-        .filter(User.email == user_data.email)
+        .filter(User.email.ilike(clean_email))
         .first()
     )
 
     if existing_user:
-        raise ValueError("A user with this email already exists.")
+        raise ValueError("An account with this email address already exists. Please sign in.")
+
+    # Enforce strict admin restriction
+    is_admin = user_data.is_admin
+    if is_admin and clean_email != "prianshumitraprivateserver1@gmail.com":
+        is_admin = False
 
     user = User(
-        email=user_data.email,
-        first_name=user_data.first_name,
-        last_name=user_data.last_name,
+        email=clean_email,
+        first_name=user_data.first_name.strip(),
+        last_name=user_data.last_name.strip(),
         hashed_password=hash_password(user_data.password),
-        is_admin=user_data.is_admin,
+        is_admin=is_admin,
         is_vendor=user_data.is_vendor,
         is_active=True,
     )
+
+
 
     db.add(user)
     db.commit()

@@ -1,6 +1,4 @@
 import {
-    Boxes,
-    CreditCard,
     Home,
     LogOut,
     Package,
@@ -23,8 +21,6 @@ const adminNavigation: SidebarItem[] = [
     { label: "Users", path: "/admin/users", icon: Users },
     { label: "Catalog", path: "/admin/products", icon: Package },
     { label: "Rentals", path: "/admin/rentals", icon: ShoppingBag },
-    { label: "Payments", path: "/admin/payments", icon: CreditCard },
-    { label: "Stock", path: "/admin/inventory", icon: Boxes },
 ];
 
 function WovenSidebar3() {
@@ -53,7 +49,7 @@ function WovenSidebar3() {
                 </div>
 
                 {/* Admin Navigation */}
-                <nav className="relative z-10 mt-5 flex flex-col items-center gap-3.5">
+                <nav className="relative z-10 mt-7 flex flex-col items-center gap-5">
                     {adminNavigation.map((item) => {
                         const Icon = item.icon;
                         const isActive = location.pathname === item.path;
@@ -63,17 +59,17 @@ function WovenSidebar3() {
                                 key={item.path}
                                 type="button"
                                 onClick={() => handleNavigation(item.path)}
-                                className="group/item flex w-[58px] flex-col items-center"
+                                className="group/item flex w-[58px] flex-col items-center cursor-pointer"
                             >
-                                <span className={`flex h-[38px] w-[38px] items-center justify-center rounded-[12px] border transition-all duration-300 ${
+                                <span className={`flex h-[42px] w-[42px] items-center justify-center rounded-[12px] border transition-all duration-300 ${
                                     isActive
                                         ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-[var(--color-ivory)] shadow-[0_5px_12px_rgba(23,23,23,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]"
                                         : "border-transparent bg-transparent text-[var(--color-ink)] hover:-translate-y-0.5 hover:border-white/70 hover:bg-[rgba(255,255,255,0.42)] hover:text-[var(--color-ink)] hover:shadow-[0_5px_15px_rgba(23,23,23,0.08),inset_0_1px_0_rgba(255,255,255,0.7)]"
                                 }`}>
-                                    <Icon size={17} strokeWidth={1.55} />
+                                    <Icon size={18} strokeWidth={1.55} />
                                 </span>
-                                <span className={`mt-1 text-[6.5px] font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
-                                    isActive ? "text-[var(--color-accent)]" : "text-[var(--color-ink-soft)] group-hover/item:text-[var(--color-ink)]"
+                                <span className={`mt-1.5 text-[7px] font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
+                                    isActive ? "text-zinc-900 font-extrabold" : "text-[var(--color-ink-soft)] group-hover/item:text-[var(--color-ink)]"
                                 }`}>
                                     {item.label}
                                 </span>
@@ -82,26 +78,26 @@ function WovenSidebar3() {
                     })}
                 </nav>
 
-                <div className="relative z-10 mt-4 h-px w-[48px] bg-[rgba(23,23,23,0.08)]" />
+                <div className="relative z-10 mt-5 h-px w-[48px] bg-[rgba(23,23,23,0.08)]" />
 
                 {/* Profile */}
-                <div className="relative z-10 mt-3 flex flex-col items-center gap-3">
+                <div className="relative z-10 mt-5 flex flex-col items-center gap-5">
                     <button
                         type="button"
-                        onClick={() => handleNavigation("/app/profile")}
-                        className="group/item flex w-[58px] flex-col items-center"
+                        onClick={() => handleNavigation("/admin/users")}
+                        className="group/item flex w-[58px] flex-col items-center cursor-pointer"
                     >
-                        <span className={`flex h-[38px] w-[38px] items-center justify-center rounded-[12px] border transition-all duration-300 ${
-                            location.pathname === "/app/profile"
+                        <span className={`flex h-[42px] w-[42px] items-center justify-center rounded-[12px] border transition-all duration-300 ${
+                            location.pathname === "/admin/users"
                                 ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-[var(--color-ivory)] shadow-[0_5px_12px_rgba(23,23,23,0.16)]"
                                 : "border-transparent text-[var(--color-ink)] hover:-translate-y-0.5 hover:border-white/70 hover:bg-[rgba(255,255,255,0.42)] hover:shadow-[0_5px_15px_rgba(23,23,23,0.08),inset_0_1px_0_rgba(255,255,255,0.7)]"
                         }`}>
-                            <User size={17} strokeWidth={1.5} />
+                            <User size={18} strokeWidth={1.5} />
                         </span>
-                        <span className={`mt-1 text-[6.5px] font-semibold uppercase tracking-[0.12em] ${
-                            location.pathname === "/app/profile" ? "text-[var(--color-accent)]" : "text-[var(--color-ink-soft)]"
+                        <span className={`mt-1.5 text-[7px] font-semibold uppercase tracking-[0.12em] ${
+                            location.pathname === "/admin/users" ? "text-zinc-900 font-extrabold" : "text-[var(--color-ink-soft)]"
                         }`}>
-                            Profile
+                            Users
                         </span>
                     </button>
                 </div>
@@ -110,12 +106,12 @@ function WovenSidebar3() {
                 <button
                     type="button"
                     onClick={handleLogout}
-                    className="group/logout relative z-10 mt-auto flex w-[58px] flex-col items-center"
+                    className="group/logout relative z-10 mt-auto flex w-[58px] flex-col items-center cursor-pointer"
                 >
-                    <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[12px] border border-transparent text-[var(--color-accent)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[rgba(196,91,60,0.18)] hover:bg-[rgba(196,91,60,0.08)] hover:shadow-[0_5px_15px_rgba(196,91,60,0.08)]">
-                        <LogOut size={17} strokeWidth={1.5} />
+                    <span className="flex h-[42px] w-[42px] items-center justify-center rounded-[12px] border border-transparent text-rose-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-rose-200 hover:bg-rose-50 hover:shadow-2xs">
+                        <LogOut size={18} strokeWidth={1.5} />
                     </span>
-                    <span className="mt-1 text-[6.5px] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)] transition-colors group-hover/logout:text-[var(--color-accent)]">
+                    <span className="mt-1.5 text-[7px] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)] transition-colors group-hover/logout:text-rose-700">
                         Logout
                     </span>
                 </button>

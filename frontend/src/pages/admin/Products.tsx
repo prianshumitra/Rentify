@@ -22,8 +22,8 @@ function AdminProducts() {
     }, []);
 
     return (
-        <main className="min-h-screen bg-[var(--color-ivory)] px-6 pb-24 pt-28 sm:pt-32 lg:pt-36 text-[var(--color-ink)]">
-            <div className="mx-auto max-w-4xl space-y-6">
+        <main className="min-h-screen bg-[var(--color-ivory)] px-4 pb-20 pt-16 sm:px-6 lg:px-8 sm:pt-20 text-[var(--color-ink)]">
+            <div className="mx-auto max-w-7xl w-full space-y-6">
                 <Link to="/admin" className="inline-flex items-center gap-2 text-xs text-[var(--color-muted)] hover:text-[var(--color-ink)] transition-colors">
                     <ArrowLeft size={14} />
                     Back to Admin Dashboard

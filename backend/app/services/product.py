@@ -75,6 +75,7 @@ def get_vendor_product(
 def list_products(
     db: Session,
     current_user: User,
+    my_products_only: bool = False,
 ) -> list[Product]:
 
     query = (
@@ -82,12 +83,13 @@ def list_products(
         .filter(Product.is_active.is_(True))
     )
 
-    if current_user.is_vendor:
+    if my_products_only or (current_user.is_vendor and not current_user.is_admin):
         query = query.filter(
-            Product.vendor_id != current_user.id
+            Product.vendor_id == current_user.id
         )
 
     return query.all()
+
 
 
 def update_product(

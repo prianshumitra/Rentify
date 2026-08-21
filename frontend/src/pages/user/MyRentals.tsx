@@ -185,15 +185,15 @@ function MyRentals() {
     }
 
     return (
-        <main className="relative min-h-screen overflow-hidden bg-[var(--color-ivory)] px-5 pb-20 pt-24 text-[var(--color-ink)]">
+        <main className="relative min-h-screen overflow-hidden bg-[var(--color-ivory)] px-4 pb-20 pt-16 sm:px-6 lg:px-8 sm:pt-20 text-[var(--color-ink)]">
             {/* Loom Threads Background */}
             <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-                <div className="absolute left-[8%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
-                <div className="absolute right-[8%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
+                <div className="absolute left-[4%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
+                <div className="absolute right-[4%] top-0 h-full w-px bg-[var(--color-line-soft)]" />
                 <div className="absolute left-0 top-[22%] h-px w-full bg-[var(--color-line-soft)]" />
             </div>
 
-            <div className="relative z-10 mx-auto max-w-6xl space-y-6">
+            <div className="relative z-10 mx-auto max-w-7xl w-full space-y-6">
                 {/* Editorial Header */}
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[var(--color-line-soft)] pb-4">
                     <div>
@@ -229,7 +229,7 @@ function MyRentals() {
                     SPOTLIGHT WINDOW & ENLARGED HERO PIE CHART WINDOW
                 ═════════════════════════════════════════════════════════ */}
                 <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] items-stretch">
-                    
+
                     {/* LEFT: SPOTLIGHT WINDOW */}
                     <div
                         onMouseEnter={() => setHoveredCard("spotlight")}
@@ -243,7 +243,7 @@ function MyRentals() {
                                 opacity: hoveredCard === "spotlight" ? 0.9 : 0.6
                             }}
                         />
-                        
+
                         <div
                             className="relative flex-1 overflow-hidden rounded-3xl border border-white/90 bg-gradient-to-b from-[#fffefc] via-[#fcfaf5] to-[#f6f1e5] backdrop-blur-2xl transition-all duration-300 ease-out shadow-md flex flex-col justify-between"
                             style={{
@@ -474,9 +474,8 @@ function MyRentals() {
                             <div className="w-full grid grid-cols-3 gap-2 pt-1">
                                 <button
                                     onClick={() => setActiveTab("active")}
-                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${
-                                        activeTab === "active" ? "bg-emerald-100/90 border-emerald-300 text-emerald-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
-                                    }`}
+                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${activeTab === "active" ? "bg-emerald-100/90 border-emerald-300 text-emerald-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
+                                        }`}
                                 >
                                     <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider">
                                         <span className="h-2 w-2 rounded-full bg-emerald-500" />
@@ -487,9 +486,8 @@ function MyRentals() {
 
                                 <button
                                     onClick={() => setActiveTab("completed")}
-                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${
-                                        activeTab === "completed" ? "bg-blue-100/90 border-blue-300 text-blue-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
-                                    }`}
+                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${activeTab === "completed" ? "bg-blue-100/90 border-blue-300 text-blue-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
+                                        }`}
                                 >
                                     <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider">
                                         <span className="h-2 w-2 rounded-full bg-blue-500" />
@@ -500,9 +498,8 @@ function MyRentals() {
 
                                 <button
                                     onClick={() => setActiveTab("cancelled")}
-                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${
-                                        activeTab === "cancelled" ? "bg-rose-100/90 border-rose-300 text-rose-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
-                                    }`}
+                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${activeTab === "cancelled" ? "bg-rose-100/90 border-rose-300 text-rose-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
+                                        }`}
                                 >
                                     <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider">
                                         <span className="h-2 w-2 rounded-full bg-rose-500" />
@@ -552,11 +549,10 @@ function MyRentals() {
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
-                                        className={`flex flex-1 sm:flex-initial items-center justify-center gap-1.5 rounded-lg px-3 py-1 text-[8px] font-semibold uppercase tracking-wider transition-all duration-300 active:scale-95 ${
-                                            isActive
+                                        className={`flex flex-1 sm:flex-initial items-center justify-center gap-1.5 rounded-lg px-3 py-1 text-[8px] font-semibold uppercase tracking-wider transition-all duration-300 active:scale-95 ${isActive
                                                 ? "bg-[var(--color-ink)] !text-white shadow-xs scale-[1.02]"
                                                 : "text-[var(--color-muted)] hover:text-[var(--color-ink)] hover:bg-white/60"
-                                        }`}
+                                            }`}
                                     >
                                         <span>{tab}</span>
                                         <span className={`text-[7px] font-mono px-1.5 py-0.2 rounded-full ${isActive ? "bg-white/20 text-white" : "bg-black/10 text-[var(--color-muted)]"}`}>

@@ -98,17 +98,22 @@ def get_current_user(
     return user
 
 
+ADMIN_EMAIL = "prianshumitraprivateserver1@gmail.com"
+
+
 def get_current_admin(
     current_user: User = Depends(get_current_user),
 ) -> User:
 
-    if not current_user.is_admin:
+    if not current_user.is_admin or current_user.email.lower() != ADMIN_EMAIL.lower():
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin access required.",
+            detail="Admin access is strictly restricted to admin only.",
         )
 
+
     return current_user
+
 
 
 def get_current_vendor(

@@ -40,7 +40,7 @@ function Activity() {
             setError("");
             try {
                 const rentals: RentalDetail[] = await getRentals();
-                
+
                 // Map real rentals into timeline activity events
                 const events: ActivityItem[] = [];
 
@@ -242,7 +242,7 @@ function Activity() {
                     TOP SPOTLIGHT WINDOW & ENLARGED ACTIVITY PIE CHART WINDOW
                 ═════════════════════════════════════════════════════════ */}
                 <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] items-stretch">
-                    
+
                     {/* LEFT: SPOTLIGHT LATEST ACTIVITY WINDOW */}
                     <div
                         onMouseEnter={() => setHoveredCard("spotlight")}
@@ -256,7 +256,7 @@ function Activity() {
                                 opacity: hoveredCard === "spotlight" ? 0.9 : 0.6
                             }}
                         />
-                        
+
                         <div
                             className="relative flex-1 overflow-hidden rounded-3xl border border-white/90 bg-gradient-to-b from-[#fffefc] via-[#fcfaf5] to-[#f6f1e5] backdrop-blur-2xl transition-all duration-300 ease-out shadow-md flex flex-col justify-between"
                             style={{
@@ -429,9 +429,8 @@ function Activity() {
                             <div className="w-full grid grid-cols-3 gap-2 pt-1">
                                 <button
                                     onClick={() => setActiveFilter("payment")}
-                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${
-                                        activeFilter === "payment" ? "bg-amber-100/90 border-amber-300 text-amber-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
-                                    }`}
+                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${activeFilter === "payment" ? "bg-amber-100/90 border-amber-300 text-amber-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
+                                        }`}
                                 >
                                     <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider">
                                         <span className="h-2 w-2 rounded-full bg-amber-500" />
@@ -442,9 +441,8 @@ function Activity() {
 
                                 <button
                                     onClick={() => setActiveFilter("status")}
-                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${
-                                        activeFilter === "status" ? "bg-emerald-100/90 border-emerald-300 text-emerald-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
-                                    }`}
+                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${activeFilter === "status" ? "bg-emerald-100/90 border-emerald-300 text-emerald-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
+                                        }`}
                                 >
                                     <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider">
                                         <span className="h-2 w-2 rounded-full bg-emerald-500" />
@@ -455,9 +453,8 @@ function Activity() {
 
                                 <button
                                     onClick={() => setActiveFilter("all")}
-                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${
-                                        activeFilter === "all" ? "bg-stone-200/90 border-stone-400 text-stone-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
-                                    }`}
+                                    className={`flex flex-col items-center p-2 rounded-xl border text-[8px] transition-all shadow-xs ${activeFilter === "all" ? "bg-stone-200/90 border-stone-400 text-stone-900 shadow-sm scale-[1.03]" : "bg-white/60 border-black/5 text-[var(--color-muted)] hover:bg-white"
+                                        }`}
                                 >
                                     <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider">
                                         <span className="h-2 w-2 rounded-full bg-[var(--color-accent)]" />
@@ -506,11 +503,10 @@ function Activity() {
                                     <button
                                         key={tab}
                                         onClick={() => setActiveFilter(tab)}
-                                        className={`flex flex-1 sm:flex-initial items-center justify-center gap-1.5 rounded-lg px-3 py-1 text-[8px] font-semibold uppercase tracking-wider transition-all duration-300 active:scale-95 ${
-                                            isActive
+                                        className={`flex flex-1 sm:flex-initial items-center justify-center gap-1.5 rounded-lg px-3 py-1 text-[8px] font-semibold uppercase tracking-wider transition-all duration-300 active:scale-95 ${isActive
                                                 ? "bg-[var(--color-ink)] !text-white shadow-xs scale-[1.02]"
                                                 : "text-[var(--color-muted)] hover:text-[var(--color-ink)] hover:bg-white/60"
-                                        }`}
+                                            }`}
                                     >
                                         <span>{tab === "all" ? "All Logs" : tab}</span>
                                         <span className={`text-[7px] font-mono px-1.5 py-0.2 rounded-full ${isActive ? "bg-white/20 text-white" : "bg-black/10 text-[var(--color-muted)]"}`}>

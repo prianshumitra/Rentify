@@ -184,7 +184,7 @@ function UserHome() {
             {/* ═══════════════════════════════════════════
                 MAIN CONTENT
             ═══════════════════════════════════════════ */}
-            <section className="relative z-10 mx-auto max-w-[var(--content-width)] px-[var(--content-padding)] pb-16 pt-20">
+            <section className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full pb-16 pt-16 sm:pt-20">
 
                 {/* TOP BAR */}
                 <div className="mb-5 flex items-center justify-between">

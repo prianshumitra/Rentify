@@ -60,13 +60,16 @@ def create_product_endpoint(
     response_model=list[ProductOut],
 )
 def list_products_endpoint(
+    my_products_only: bool = False,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     return list_products(
         db=db,
         current_user=current_user,
+        my_products_only=my_products_only,
     )
+
 
 
 @router.get(

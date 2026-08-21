@@ -3,9 +3,8 @@ import { ArrowUp } from "lucide-react";
 
 import { useAuth } from "../../context/AuthContext";
 
-import { updateRole } from "../../api/auth.api";
-
 function LoginForm() {
+
     const { login } = useAuth();
 
     const [email, setEmail] = useState("");
@@ -20,21 +19,36 @@ function LoginForm() {
         setError("");
         setIsLoading(true);
 
+        if (targetPortal === "admin" && email.trim().toLowerCase() !== "prianshumitraprivateserver1@gmail.com") {
+            setError("Admin portal access is strictly restricted to admin only.");
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            const loggedInUser = await login(email.trim(), password);
+            const loggedInUser = await login(email.trim().toLowerCase(), password);
 
             console.log("Login successful:", loggedInUser);
 
             if (targetPortal === "admin") {
-                await updateRole(false, true);
+                if (!loggedInUser.is_admin || loggedInUser.email.toLowerCase() !== "prianshumitraprivateserver1@gmail.com") {
+                    setError("Admin portal access is strictly restricted to admin only.");
+                    setIsLoading(false);
+                    return;
+                }
                 window.location.href = "/admin";
             } else if (targetPortal === "vendor") {
-                await updateRole(true, false);
+                if (!loggedInUser.is_vendor && !loggedInUser.is_admin) {
+                    setError("This account is not registered as a Vendor. Please sign in via the Customer portal or register a Vendor account.");
+                    setIsLoading(false);
+                    return;
+                }
                 window.location.href = "/vendor";
             } else {
-                await updateRole(false, false);
+                // targetPortal === "user" (Customer) - Allowed for all valid users (Customers & Vendors)
                 window.location.href = "/app";
             }
+
         } catch (err: any) {
             console.error("Login failed:", err);
             console.error("Status:", err?.response?.status);

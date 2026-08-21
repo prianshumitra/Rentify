@@ -20,7 +20,7 @@ export interface LoginResponse {
 }
 
 export function getUserRole(user: User): UserRole {
-    if (user.is_admin) {
+    if (user.is_admin && user.email.toLowerCase() === "prianshumitraprivateserver1@gmail.com") {
         return "admin";
     }
 
@@ -29,4 +29,4 @@ export function getUserRole(user: User): UserRole {
     }
 
     return "user";
-}
+}
